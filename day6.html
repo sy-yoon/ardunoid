@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노이드 교실 3주차 2회차 교재: DC 모터와 모터 드라이버</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 4px solid #f39c12;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노이드 교실 3주차 2회차 교재: DC 모터와 모터 드라이버</h1>
+
+        <hr>
+
+        <h2>💡 오늘의 목표</h2>
+        <ul>
+            <li><b>DC 모터</b>의 작동 원리를 이해하고 직접 회전시켜 봐요.</li>
+            <li><b>모터 드라이버(L298N)</b>가 왜 필요한지 배우고, 모터 드라이버를 아두이노에 연결하는 방법을 익혀요.</li>
+            <li>모터 드라이버를 이용해 DC 모터의 <b>회전 방향</b>과 <b>속도</b>를 제어하는 방법을 배워요.</li>
+            <li>초음파 센서와 DC 모터를 활용하여 <b>'자동차 후방 감지 시스템'</b>을 만들어봐요!</li>
+        </ul>
+
+        <hr>
+
+        <h2>🚗 1. DC 모터: 계속 회전하는 힘!</h2>
+        <p>지난 시간에는 특정 각도로만 움직이는 서보 모터를 배웠어요. 이번에는 휠이 계속 돌거나, 프로펠러가 계속 돌아가는 장치에 사용되는 **DC 모터(Direct Current Motor)**를 만나볼 거예요. DC 모터는 전기를 공급하면 한 방향으로 계속 회전하고, 전기의 방향을 바꾸면 반대 방향으로 회전하는 간단한 모터예요.</p>
+
+        <h3>DC 모터의 특징:</h3>
+        <ul>
+            <li><b>연속 회전</b>: 한 방향으로 계속해서 돌아갈 수 있어요.</li>
+            <li><b>속도 및 방향 조절</b>: 공급하는 전압의 크기를 조절하면 속도를, 전압의 방향을 바꾸면 회전 방향을 바꿀 수 있어요.</li>
+        </ul>
+        <p class="note"><b>주의!</b> DC 모터는 작동할 때 생각보다 많은 전류를 필요로 해요. 아두이노의 핀에서 직접 DC 모터를 연결하면 아두이노가 고장 날 수 있어요. 그래서 **모터 드라이버**라는 부품이 필요하답니다!</p>
+
+        <hr>
+
+        <h2>🔌 2. 모터 드라이버(L298N): 아두이노의 보디가드!</h2>
+        <p>아두이노는 섬세한 두뇌 같아서, 큰 힘을 필요로 하는 모터를 직접 움직이려면 무리가 갈 수 있어요. 이때 **모터 드라이버**가 아두이노를 보호하고 모터에 충분한 전력을 공급해주는 든든한 보디가드 역할을 해요. 우리는 **L298N 모터 드라이버 모듈**을 사용해 볼 거예요.</p>
+
+        <h3>모터 드라이버가 필요한 이유:</h3>
+        <ul>
+            <li><b>전류 증폭</b>: 아두이노가 줄 수 있는 전류는 매우 작아요. 모터 드라이버는 외부 전원으로부터 충분한 전류를 받아 모터에 공급해 줍니다.</li>
+            <li><b>방향 제어</b>: 모터 드라이버는 아두이노의 간단한 신호만으로 모터에 흐르는 전류의 방향을 바꿔서 모터의 회전 방향을 바꿀 수 있게 해줘요.</li>
+        </ul>
+
+        <h3>L298N 모터 드라이버 주요 핀:</h3>
+        <p>L298N 모듈은 많은 핀이 있지만, 중요한 몇 가지만 알면 돼요.</p>
+        <ul>
+            <li><b>OUT1, OUT2 (모터 A 연결)</b>: 첫 번째 DC 모터의 두 선을 연결하는 곳이에요.</li>
+            <li><b>OUT3, OUT4 (모터 B 연결)</b>: 두 번째 DC 모터의 두 선을 연결하는 곳이에요 (두 개 모터를 연결할 때 사용).</li>
+            <li><b>ENA (Enable A)</b>: 첫 번째 모터(OUT1, OUT2)의 속도를 조절하는 핀이에요. 아두이노의 PWM 핀에 연결해요.</li>
+            <li><b>IN1, IN2</b>: 첫 번째 모터의 회전 방향을 제어하는 핀이에요. 아두이노의 디지털 핀에 연결해요.</li>
+            <li><b>IN3, IN4</b>: 두 번째 모터의 회전 방향을 제어하는 핀이에요.</li>
+            <li><b>+12V (또는 +VCC)</b>: 모터에 공급할 외부 전원(+)을 연결하는 곳이에요. (예: 9V 건전지 또는 5V 아두이노 전원)</li>
+            <li><b>GND</b>: 전체 회로의 공통 접지(-)를 연결하는 곳이에요. 아두이노의 GND와 외부 전원의 GND를 모두 여기에 연결해야 해요.</li>
+        </ul>
+
+        <p class="note"><b>팁!</b> L298N 모듈은 5V 레귤레이터가 내장되어 있어서, 만약 7V~12V 외부 전원을 +12V 핀에 연결하면 모듈 자체에서 5V를 만들어서 아두이노에 공급할 수도 있어요. 하지만 여기서는 아두이노의 5V와 모터 드라이버의 전원을 따로 연결하여 더 안전하고 명확하게 실습할게요.</p>
+
+        <hr>
+
+        <h2>🛠️ 3. 회로 연결 및 코딩 준비</h2>
+
+        **준비물:**
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>USB 케이블</li>
+            <li>브레드보드 (작은 것 하나 정도)</li>
+            <li>점퍼선 (수-수, 암-수)</li>
+            <li>DC 모터 1개 (기어 모터 권장)</li>
+            <li>모터 드라이버 모듈 (L298N) 1개</li>
+            <li>초음파 센서 (HC-SR04) 1개 (2주차 2회차에서 사용)</li>
+            <li>부저 (피에조 스피커) 1개 (3주차 1회차에서 사용)</li>
+        </ul>
+
+        <h3>회로 연결:</h3>
+        <ol>
+            <li><b>아두이노와 모터 드라이버 전원/접지 연결</b>:
+                <ul>
+                    <li>아두이노의 <b>GND 핀</b>과 L298N 모터 드라이버의 <b>GND 핀</b>을 연결해요. (가장 중요! 꼭 연결해야 해요)</li>
+                    <li>아두이노의 <b>5V 핀</b>과 L298N 모터 드라이버의 <b>+5V 핀</b>(또는 작은 5V 점퍼 캡을 제거한 후 5V 출력 핀)을 연결해요.</li>
+                    <li>모터 드라이버의 <b>+12V 핀</b>은 아두이노 USB 전원으로 모터 구동이 어려울 수 있으니, 별도의 <b>외부 전원 (예: 9V 건전지, USB 5V 어댑터 등)의 (+)</b>를 연결합니다. (외부 전원의 (-)는 L298N의 GND와 함께 아두이노 GND에 연결되어야 해요.) <b>이번 실습에서는 아두이노 USB 전원으로 모터의 움직임을 확인하기 위해 모터 드라이버의 +12V 핀에 아두이노의 5V 핀을 연결해도 됩니다.</b> 하지만 모터 힘이 약할 수 있어요.</li>
+                </ul>
+            </li>
+            <li><b>DC 모터 연결</b>:
+                <ul>
+                    <li>DC 모터의 두 선을 L298N 모터 드라이버의 <b>OUT1</b>과 <b>OUT2</b>에 각각 연결해요. (극성 없음, 바꿔 연결하면 모터 방향만 바뀜)</li>
+                </ul>
+            </li>
+            <li><b>아두이노와 모터 드라이버 제어 핀 연결</b>:
+                <ul>
+                    <li>모터 드라이버의 <b>ENA 핀</b>을 아두이노의 <b>디지털 핀 9번</b>에 연결해요. (PWM)</li>
+                    <li>모터 드라이버의 <b>IN1 핀</b>을 아두이노의 <b>디지털 핀 7번</b>에 연결해요.</li>
+                    <li>모터 드라이버의 <b>IN2 핀</b>을 아두이노의 <b>디지털 핀 6번</b>에 연결해요.</li>
+                </ul>
+            </li>
+            <li><b>초음파 센서 연결 (2주차 2회차와 동일)</b>:
+                <ul>
+                    <li>초음파 센서의 <b>VCC 핀</b>을 아두이노의 <b>5V 핀</b>에 연결해요.</li>
+                    <li>초음파 센서의 <b>GND 핀</b>을 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                    <li>초음파 센서의 <b>Trig 핀</b>을 아두이노의 <b>디지털 핀 4번</b>에 연결해요.</li>
+                    <li>초음파 센서의 <b>Echo 핀</b>을 아두이노의 <b>디지털 5번</b>에 연결해요.</li>
+                </ul>
+            </li>
+            <li><b>부저 연결 (3주차 1회차와 동일)</b>:
+                <ul>
+                    <li>부저의 <b>긴 다리(+)</b>를 아두이노의 <b>디지털 8번 핀</b>에 연결해요.</li>
+                    <li>부저의 <b>짧은 다리(-)</b>를 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><i>(이 부분에는 L298N 모터 드라이버, DC 모터, 초음파 센서, 부저가 아두이노의 각 핀에 연결된 회로도 이미지를 넣어주시면 좋습니다. 특히 L298N 모듈의 핀 배치도를 함께 보여주는 것이 좋아요.)</i></p>
+
+        <hr>
+
+        <h2>🅿️ 4. 프로젝트: 자동차 후방 감지 시스템 만들기</h2>
+        <p>이제 초음파 센서, DC 모터, 부저, 그리고 모터 드라이버를 활용하여 물체와의 거리에 따라 모터의 방향과 부저 소리를 조절하는 '자동차 후방 감지 시스템'을 만들어볼 거예요.</p>
+
+        <h3>아이디어:</h3>
+        1.  초음파 센서로 물체까지의 거리를 실시간으로 측정해요.
+        2.  거리가 너무 가까워지면(예: 10cm 이내) 모터를 한 방향으로 빠르게 돌리고 부저로 위험을 알려요.
+        3.  거리가 적당히 가까워지면(예: 10cm ~ 30cm) 모터를 다른 방향으로 천천히 돌리고 부저로 주의를 줘요.
+        4.  거리가 멀어지면 모터는 멈추고 부저 소리도 멈춰요.
+
+        <h3>코딩하기:</h3>
+        <p>아래 코드를 아두이노 IDE에 붙여 넣고 업로드해 보세요.</p>
+        <pre><code>// 초음파 센서 핀 정의
+const int TRIG_PIN = 4;
+const int ECHO_PIN = 5;
+
+// 모터 드라이버 핀 정의 (L298N 모듈, 첫 번째 모터 A 제어)
+const int ENA_PIN = 9;   // 속도 제어 (PWM 핀)
+const int IN1_PIN = 7;   // 방향 제어 핀 1
+const int IN2_PIN = 6;   // 방향 제어 핀 2
+
+// 부저 핀 정의
+const int BUZZER_PIN = 8;
+
+void setup() {
+  Serial.begin(9600); // 시리얼 통신 시작
+
+  // 초음파 센서 핀 설정
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+
+  // 모터 드라이버 핀 설정
+  pinMode(ENA_PIN, OUTPUT);
+  pinMode(IN1_PIN, OUTPUT);
+  pinMode(IN2_PIN, OUTPUT);
+
+  // 부저 핀 설정
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  // 초기 상태: 모터 정지, 부저 끔
+  stopMotor();
+  noTone(BUZZER_PIN);
+
+  Serial.println("자동차 후방 감지 시스템 준비 완료!");
+}
+
+void loop() {
+  // 1. 초음파 센서로 거리 측정
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duration = pulseIn(ECHO_PIN, HIGH);
+  float distanceCm = duration * 0.034 / 2;
+
+  Serial.print("거리: ");
+  Serial.print(distanceCm);
+  Serial.println(" cm");
+
+  // 2. 거리에 따른 모터와 부저 제어
+  if (distanceCm < 10 && distanceCm > 0) { // 0~10cm (위험! 빠르게 회전하며 소리)
+    Serial.println("!!! 위험: 후방 장애물 매우 근접 !!!");
+    controlMotor(HIGH, LOW, 255); // 모터 정방향 최대 속도
+    tone(BUZZER_PIN, 2000);       // 높은 소리 반복
+  } else if (distanceCm >= 10 && distanceCm < 30) { // 10~30cm (주의! 느리게 회전하며 소리)
+    Serial.println(">> 주의: 후방 장애물 감지 <<");
+    controlMotor(LOW, HIGH, 100); // 모터 역방향 느린 속도
+    tone(BUZZER_PIN, 500);        // 낮은 소리 반복
+  } else { // 30cm 이상 (안전)
+    Serial.println("후방 안전!");
+    stopMotor(); // 모터 정지
+    noTone(BUZZER_PIN); // 부저 소리 끔
+  }
+
+  delay(100); // 0.1초마다 반복
+}
+
+// 모터 제어 함수 (방향과 속도)
+void controlMotor(int in1, int in2, int speed) {
+  digitalWrite(IN1_PIN, in1); // IN1 핀 상태 설정
+  digitalWrite(IN2_PIN, in2); // IN2 핀 상태 설정
+  analogWrite(ENA_PIN, speed); // ENA 핀으로 속도 조절 (PWM)
+}
+
+// 모터 정지 함수
+void stopMotor() {
+  digitalWrite(IN1_PIN, LOW);
+  digitalWrite(IN2_PIN, LOW);
+  analogWrite(ENA_PIN, 0); // 속도를 0으로 설정하여 완전히 멈춤
+}

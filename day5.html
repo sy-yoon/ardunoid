@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노이드 교실 3주차 1회차 교재: 소리와 빛의 감지</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 4px solid #f39c12;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노이드 교실 3주차 1회차 교재: 소리와 빛의 감지</h1>
+
+        <hr>
+
+        <h2>💡 오늘의 목표</h2>
+        <ul>
+            <li><b>부저(피에조 스피커)</b>를 이용해 다양한 소리를 내는 방법을 배워요.</li>
+            <li><b>포토인터럽터 센서</b>의 원리를 이해하고 물체 감지에 활용해요.</li>
+            <li>소리와 빛 감지 센서를 조합하여 <b>'자동문 출입 알림기'</b>를 만들어봐요.</li>
+            <li>음악을 연주하거나 게임에 활용하는 등 응용 아이디어를 탐색해요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>🎶 1. 부저(Buzzer): 아두이노가 소리를 내다!</h2>
+        <p>아두이노는 LED를 켜거나 모터를 움직이는 것뿐만 아니라, 소리도 낼 수 있어요! **부저(Buzzer)**는 전기 신호를 소리로 바꿔주는 간단한 부품이에요. 우리 주변의 알람 시계, 전자레인지, 장난감 등에서 들리는 '삐-' 소리가 바로 부저에서 나는 소리랍니다.</p>
+        <p>부저에는 두 종류가 있는데, 우리는 특정 주파수(음의 높이)를 직접 제어할 수 있는 **능동형 부저**나 **피에조 스피커**를 사용할 거예요. 아두이노의 `tone()` 함수를 이용하면 다양한 음정을 연주할 수 있답니다!</p>
+
+        <h3>부저 연결 선:</h3>
+        <p>부저(피에조 스피커)는 보통 두 개의 다리를 가지고 있어요.</p>
+        <ul>
+            <li>긴 다리(+): 아두이노의 디지털 핀(PWM 핀을 주로 사용)에 연결해요.</li>
+            <li>짧은 다리(-): 아두이노의 GND 핀에 연결해요.</li>
+        </ul>
+        <p class="note"><b>팁!</b> 부저에 저항을 연결할 필요는 없지만, 소리가 너무 크다면 220옴 정도의 저항을 직렬로 연결하면 소리를 줄일 수 있어요.</p>
+
+        <hr>
+
+        <h2>🔦 2. 포토인터럽터 센서: 빛으로 물체를 감지</h2>
+        <p>**포토인터럽터 센서(Photo Interrupter Sensor)**는 빛을 이용해서 물체의 유무를 감지하는 센서예요. 마치 '빛의 문'과 같아서, 이 문이 열려 있는지 닫혀 있는지를 알려준답니다. 주로 자동문, 컨베이어 벨트에서 물건의 흐름 감지, 3D 프린터의 위치 인식 등에 사용돼요.</p>
+
+        <h3>작동 원리:</h3>
+        <p>포토인터럽터 센서는 두 부분으로 나뉘어져 있어요.</p>
+        <ul>
+            <li><b>발광부(Emitter)</b>: 적외선 LED가 있어서 보이지 않는 적외선 빛을 계속해서 내보내요.</li>
+            <li><b>수광부(Detector)</b>: 포토트랜지스터가 있어서 적외선 빛을 받으면 전기가 통하는 특징을 가지고 있어요.</li>
+        </ul>
+        <p>센서의 두 부분 사이에 물체가 없으면 빛이 수광부에 도달하여 전기가 통하고, 물체가 있으면 빛이 차단되어 전기가 통하지 않아요. 아두이노는 이 전기 신호의 유무(HIGH/LOW)를 읽어서 물체가 있는지 없는지를 판단한답니다.</p>
+        <p class="note"><b>주의!</b> 포토인터럽터는 디지털 방식으로 작동하는 센서예요. 즉, 물체가 감지되면 HIGH 또는 LOW 중 하나의 신호를, 감지되지 않으면 다른 하나의 신호를 보내줍니다.</p>
+
+        <hr>
+
+        <h2>🛠️ 3. 회로 연결 및 코딩 준비</h2>
+
+        **준비물:**
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>USB 케이블</li>
+            <li>브레드보드</li>
+            <li>점퍼선 (수-수)</li>
+            <li>부저 (피에조 스피커) 1개</li>
+            <li>포토인터럽터 센서 (3핀 또는 4핀 모듈) 1개</li>
+            <li>LED 1개 (선택 사항, 알림용)</li>
+            <li>저항 1개 (220옴 또는 330옴, LED용 - LED 추가 시)</li>
+        </ul>
+
+        <h3>회로 연결 (부저 및 포토인터럽터):</h3>
+        <ol>
+            <li><b>부저 연결</b>:
+                <ul>
+                    <li>부저의 <b>긴 다리(+)</b>를 아두이노의 <b>디지털 핀 8번</b>에 연결해요.</li>
+                    <li>부저의 <b>짧은 다리(-)</b>를 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                </ul>
+            </li>
+            <li><b>포토인터럽터 센서 연결 (3핀 또는 4핀 모듈 기준)</b>:
+                <ul>
+                    <li>대부분의 모듈은 VCC, GND, Signal 핀을 가지고 있어요.</li>
+                    <li>센서 모듈의 <b>VCC 핀</b>을 아두이노의 <b>5V 핀</b>에 연결해요.</li>
+                    <li>센서 모듈의 <b>GND 핀</b>을 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                    <li>센서 모듈의 <b>Signal 핀 (DOUT 또는 SIG)</b>을 아두이노의 <b>디지털 핀 2번</b>에 연결해요.</li>
+                </ul>
+                <p class="note"><b>팁!</b> 포토인터럽터 모듈에는 보통 감지 여부를 알려주는 LED가 달려있거나, 감도 조절을 위한 가변 저항이 있을 수 있어요. 모듈의 설명서를 참고해 주세요.</p>
+            </li>
+            <li><b>LED 연결 (선택 사항)</b>:
+                <ul>
+                    <li>LED의 긴 다리(+)를 저항에 연결하고, 저항의 다른 쪽 다리를 아두이노 <b>디지털 13번 핀</b>에 연결해요.</li>
+                    <li>LED의 짧은 다리(-)를 아두이노 <b>GND 핀</b>에 연결해요.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><i>(이 부분에는 부저, 포토인터럽터, 그리고 선택 사항인 LED가 아두이노의 각 핀에 연결된 회로도 이미지를 넣어주시면 좋습니다.)</i></p>
+
+        <hr>
+
+        <h2>🎵 4. 프로젝트: 자동문 출입 알림기 만들기</h2>
+        <p>이제 부저와 포토인터럽터 센서를 활용하여 물체가 센서를 통과할 때 소리와 함께 알림을 주는 '자동문 출입 알림기'를 만들어 볼 거예요.</p>
+
+        <h3>아이디어:</h3>
+        1.  포토인터럽터 센서 사이에 물체가 없으면 아무 일도 일어나지 않아요.
+        2.  물체가 센서 사이를 통과하여 빛을 가리면(감지되면) 부저에서 '삑' 소리가 나고 LED(선택 사항)가 잠시 켜져요.
+        3.  물체가 지나가면 다시 알림이 멈춰요.
+
+        <h3>코딩하기:</h3>
+        <p>아래 코드를 아두이노 IDE에 붙여 넣고 업로드해 보세요.</p>
+        <pre><code>// 핀 번호 정의
+const int BUZZER_PIN = 8;     // 부저가 연결된 핀
+const int SENSOR_PIN = 2;     // 포토인터럽터 센서 Signal 핀
+const int LED_PIN = 13;       // 알림용 LED 핀 (선택 사항)
+
+void setup() {
+  Serial.begin(9600); // 시리얼 통신 시작
+
+  pinMode(BUZZER_PIN, OUTPUT);  // 부저 핀은 출력
+  pinMode(SENSOR_PIN, INPUT);   // 센서 핀은 입력
+  pinMode(LED_PIN, OUTPUT);     // LED 핀은 출력 (선택 사항)
+
+  Serial.println("자동문 출입 알림기 준비 완료!");
+  Serial.println("센서 사이로 물체를 통과시켜 보세요.");
+}
+
+void loop() {
+  // 포토인터럽터 센서 값 읽기 (디지털 값: HIGH 또는 LOW)
+  // 센서 모듈에 따라 물체 감지 시 HIGH가 될 수도 있고 LOW가 될 수도 있습니다.
+  // 실제 작동을 보면서 if문의 조건을 변경해주세요. (예: digitalRead(SENSOR_PIN) == LOW)
+  int sensorValue = digitalRead(SENSOR_PIN);
+
+  Serial.print("센서 값: ");
+  Serial.println(sensorValue);
+
+  // 물체가 감지되면 (예: 센서 값이 LOW일 때)
+  if (sensorValue == LOW) { // 물체가 빛을 가려 센서 값이 LOW가 되는 경우
+    tone(BUZZER_PIN, 1000);   // 부저로 1000Hz(도) 소리 내기
+    digitalWrite(LED_PIN, HIGH); // LED 켜기 (선택 사항)
+    Serial.println("물체 감지! 알림 소리!");
+  } else { // 물체가 없으면 (센서 값이 HIGH일 때)
+    noTone(BUZZER_PIN);      // 부저 소리 끄기
+    digitalWrite(LED_PIN, LOW);  // LED 끄기 (선택 사항)
+  }
+
+  delay(50); // 짧게 기다려 센서 값 안정화
+}
+
+/*
+ * tone(pin, frequency, duration) 함수 설명:
+ * pin: 소리를 낼 핀 번호
+ * frequency: 소리의 주파수 (Hz 단위, 음의 높이를 결정)
+ * duration: 소리가 지속될 시간 (밀리초 단위, 생략 가능)
+ *
+ * noTone(pin) 함수 설명:
+ * pin: 소리를 끄려는 핀 번호
+ */

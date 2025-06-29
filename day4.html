@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노이드 교실 2주차 2회차 교재: 서보 모터와 초음파 센서</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 4px solid #f39c12;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노이드 교실 2주차 2회차 교재: 서보 모터와 초음파 센서</h1>
+
+        <hr>
+
+        <h2>💡 오늘의 목표</h2>
+        <ul>
+            <li><b>서보 모터</b>의 원리를 이해하고 각도를 제어하는 방법을 배워요.</li>
+            <li><b>초음파 센서</b>로 물체와의 거리를 정확하게 측정하는 방법을 배워요.</li>
+            <li>측정된 거리에 따라 서보 모터의 각도를 조절하는 프로젝트를 진행해요.</li>
+            <li>배운 센서와 액추에이터(모터)를 활용해서 <b>'자동 거리 감지 알림기'</b>를 만들어봐요!</li>
+        </ul>
+
+        <hr>
+
+        <h2>🔍 1. 서보 모터: 정확한 각도 제어의 마법사</h2>
+        <p>지난 시간에는 LED처럼 켜고 끄거나 밝기를 조절하는 부품들을 다뤄봤어요. 이번에는 특정 각도로 정확하게 움직일 수 있는 모터인 **서보 모터(Servo Motor)**를 만나볼 거예요. 서보 모터는 로봇 팔, 드론의 카메라 방향 조절, RC 자동차의 조향 장치 등 정밀한 움직임이 필요한 곳에 아주 많이 사용된답니다.</p>
+        <p>일반 모터는 계속 돌기만 하지만, 서보 모터는 우리가 원하는 특정 각도(예: 0도부터 180도까지)로 정확히 이동하고 그 위치를 유지할 수 있다는 큰 차이점이 있어요.</p>
+
+        <h3>서보 모터 연결 선:</h3>
+        <p>대부분의 서보 모터는 세 개의 선을 가지고 있어요.</p>
+        <ul>
+            <li><b>갈색(또는 검정색)</b>: GND (접지, -)</li>
+            <li><b>빨간색</b>: VCC (전원, +5V)</li>
+            <li><b>주황색(또는 노란색/흰색)</b>: Signal (제어 신호) - 이 선을 아두이노의 디지털 핀(PWM 핀, `~` 표시 있는 핀)에 연결해요.</li>
+        </ul>
+        <p class="note"><b>주의!</b> 서보 모터는 순간적으로 많은 전류를 소모할 수 있으므로, 여러 개를 동시에 사용할 때는 별도의 외부 전원을 사용하는 것이 안전해요. 하지만 한 개 정도는 아두이노 5V 핀에 직접 연결해도 괜찮아요.</p>
+
+        <hr>
+
+        <h2>🔊 2. 초음파 센서: 소리로 거리를 재는 눈</h2>
+        <p>우리 눈에 보이지 않는 물체의 거리를 측정하는 센서가 있다면 어떨까요? **초음파 센서(Ultrasonic Sensor)**가 바로 그런 역할을 한답니다. 박쥐나 돌고래가 초음파를 이용해 주변 물체를 감지하듯이, 초음파 센서도 사람이 들을 수 없는 높은 주파수의 소리(초음파)를 발사하고, 그 소리가 물체에 부딪혀 되돌아오는 시간을 측정해서 거리를 계산해요.</p>
+
+        <h3>초음파 센서 (HC-SR04) 연결 핀:</h3>
+        <p>가장 흔히 사용되는 HC-SR04 초음파 센서는 보통 4개의 핀을 가지고 있어요.</p>
+        <ul>
+            <li><b>VCC</b>: 전원 (+5V)</li>
+            <li><b>GND</b>: 접지 (-)</li>
+            <li><b>Trig (트리거)</b>: 초음파를 쏘는 신호 핀</li>
+            <li><b>Echo (에코)</b>: 초음파가 돌아오는 것을 감지하는 신호 핀</li>
+        </ul>
+
+        <h3>거리 계산 원리:</h3>
+        <p>초음파 센서는 Trig 핀으로 초음파를 발사하고, Echo 핀으로 돌아오는 초음파를 받아요. 이때 걸린 시간과 소리의 속도(대략 340m/s 또는 0.034cm/μs)를 알면 거리를 계산할 수 있어요.</p>
+        <p><b>거리(cm) = (음파가 왕복한 시간(μs) * 소리의 속도(0.034cm/μs)) / 2</b></p>
+        <p>나누기 2를 하는 이유는, 음파가 물체까지 갔다가 다시 돌아오는 '왕복 시간'이기 때문에, 실제 거리는 왕복 거리의 절반이 되기 때문이에요.</p>
+
+        <hr>
+
+        <h2>🛠️ 3. 회로 연결 및 코딩 준비</h2>
+
+        **준비물:**
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>USB 케이블</li>
+            <li>브레드보드</li>
+            <li>점퍼선 (수-수)</li>
+            <li>서보 모터 (SG90 등 미니 서보) 1개</li>
+            <li>초음파 센서 (HC-SR04) 1개</li>
+        </ul>
+
+        <h3>회로 연결:</h3>
+        <ol>
+            <li><b>서보 모터 연결</b>:
+                <ul>
+                    <li>서보 모터의 <b>갈색(GND) 선</b>을 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                    <li>서보 모터의 <b>빨간색(VCC) 선</b>을 아두이노의 <b>5V 핀</b>에 연결해요.</li>
+                    <li>서보 모터의 <b>주황색(Signal) 선</b>을 아두이노의 <b>디지털 핀 9번</b>에 연결해요. (PWM 핀)</li>
+                </ul>
+            </li>
+            <li><b>초음파 센서 연결 (HC-SR04 기준)</b>:
+                <ul>
+                    <li>초음파 센서의 <b>VCC 핀</b>을 아두이노의 <b>5V 핀</b>에 연결해요.</li>
+                    <li>초음파 센서의 <b>GND 핀</b>을 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                    <li>초음파 센서의 <b>Trig 핀</b>을 아두이노의 <b>디지털 핀 10번</b>에 연결해요.</li>
+                    <li>초음파 센서의 <b>Echo 핀</b>을 아두이노의 <b>디지털 핀 11번</b>에 연결해요.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><i>(이 부분에는 서보 모터와 초음파 센서가 아두이노의 각 핀에 연결된 회로도 이미지를 넣어주시면 좋습니다.)</i></p>
+
+        <h3>코딩 준비: 라이브러리 추가</h3>
+        <p>아두이노에서 서보 모터나 초음파 센서를 쉽게 제어하려면 **라이브러리(Library)**를 사용하는 것이 편리해요. 라이브러리는 특정 부품을 제어하는 데 필요한 복잡한 코드들을 미리 만들어 놓은 것이라고 생각하면 돼요. 우리는 `Servo.h` 라이브러리를 사용할 거예요.</p>
+        <ol>
+            <li>아두이노 IDE를 열어요.</li>
+            <li>메뉴에서 `스케치(Sketch)` → `라이브러리 포함하기(Include Library)` → `라이브러리 관리...(Manage Libraries...)`를 클릭해요.</li>
+            <li>라이브러리 매니저 창이 뜨면 검색창에 "Servo"라고 입력하고, `Servo by Michael Margolis`를 찾아 설치해요.</li>
+            <li>초음파 센서 라이브러리도 설치할 수 있지만, 이번에는 직접 코드로 거리를 계산해볼 거예요.</li>
+        </ol>
+
+        <hr>
+
+        <h2>🤖 4. 프로젝트: 자동 거리 감지 알림기 만들기</h2>
+        <p>이제 서보 모터와 초음파 센서를 활용하여 물체와의 거리에 따라 서보 모터가 움직이는 '자동 거리 감지 알림기'를 만들어볼 거예요.</p>
+
+        <h3>아이디어:</h3>
+        1.  초음파 센서로 물체까지의 거리를 측정해요.
+        2.  측정된 거리가 일정 범위(예: 30cm 이내)로 가까워지면 서보 모터가 움직여 알림을 줘요.
+        3.  거리가 멀어지면 서보 모터가 다시 원래 위치로 돌아가요.
+
+        <h3>코딩하기:</h3>
+        <p>아래 코드를 아두이노 IDE에 붙여 넣고 업로드해 보세요.</p>
+        <pre><code>#include &lt;Servo.h&gt; // 서보 모터 라이브러리 포함
+
+// 핀 번호 정의
+const int TRIG_PIN = 10; // 초음파 센서 Trig 핀
+const int ECHO_PIN = 11; // 초음파 센서 Echo 핀
+const int SERVO_PIN = 9; // 서보 모터 Signal 핀 (PWM 핀)
+
+Servo myServo; // 서보 객체 생성 (서보 모터를 제어할 준비!)
+
+void setup() {
+  Serial.begin(9600); // 시리얼 통신 시작
+
+  pinMode(TRIG_PIN, OUTPUT); // Trig 핀은 출력
+  pinMode(ECHO_PIN, INPUT);  // Echo 핀은 입력
+
+  myServo.attach(SERVO_PIN); // 서보 모터를 9번 핀에 연결
+  myServo.write(0); // 서보 모터를 0도로 초기화
+}
+
+void loop() {
+  // 1. 초음파 센서로 거리 측정
+  // Trig 핀을 LOW로 2마이크로초 유지
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  // Trig 핀을 HIGH로 10마이크로초 유지 (초음파 발사)
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  // Trig 핀을 다시 LOW로
+  digitalWrite(TRIG_PIN, LOW);
+
+  // Echo 핀으로 초음파가 돌아오는 시간을 측정
+  long duration = pulseIn(ECHO_PIN, HIGH); // Echo 핀이 HIGH 상태인 시간 (마이크로초)
+
+  // 시간(마이크로초)을 거리(cm)로 변환
+  // 소리의 속도: 0.034cm/μs (초당 340m)
+  float distanceCm = duration * 0.034 / 2;
+
+  Serial.print("거리: ");
+  Serial.print(distanceCm);
+  Serial.println(" cm");
+
+  // 2. 측정된 거리에 따라 서보 모터 제어
+  if (distanceCm < 30 && distanceCm > 0) { // 0~30cm 이내에 물체가 감지되면
+    myServo.write(90); // 서보 모터를 90도로 움직임 (알림)
+    delay(500); // 0.5초 대기
+  } else {
+    myServo.write(0); // 물체가 없으면 0도로 돌아감 (기본 위치)
+  }
+
+  delay(100); // 0.1초마다 반복
+}

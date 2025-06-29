@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노 RC카 교실 8주차 교재: 고급 자율 주행 - '라인 트레이서' RC카</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+        h4 {
+            color: #1a5276;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #eaf6ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            border: 1px solid #c0d8e8;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 5px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .image-container img {
+            max-width: 90%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .caution {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노 RC카 교실 8주차 교재: 고급 자율 주행 - '라인 트레이서' RC카</h1>
+
+        <hr>
+
+        <h2>💡 이번 주 학습 목표</h2>
+        <ul>
+            <li>**라인 트레이서 센서(적외선 센서)**의 원리와 동작 방식을 이해해요.</li>
+            <li>여러 개의 라인 트레이서 센서를 RC카 바닥에 부착하여 선을 감지하는 방법을 익혀요.</li>
+            <li>센서 데이터를 기반으로 RC카가 검은 선을 따라 자동으로 주행하는 **라인 트레이싱 알고리즘**을 구현해요.</li>
+            <li>자율 주행 RC카의 정밀도를 높이는 방법을 고민하고 적용해요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>1회차: 라인 트레이서 센서의 이해 및 회로 연결</h2>
+
+        <h3>🔍 1. 라인 트레이서 센서(적외선 센서)란?</h3>
+        <p>라인 트레이서 센서는 **적외선(IR) 발광부**와 **수광부**로 구성되어 있어요. 발광부에서 적외선을 쏜 다음, 바닥에 반사되어 돌아오는 적외선 양을 수광부에서 측정하는 방식으로 작동해요.</p>
+        <ul>
+            <li><b>검은색 표면:</b> 적외선을 대부분 흡수하여 반사율이 낮습니다. (센서 수광부에 도달하는 적외선 양이 적음)</li>
+            <li><b>흰색 표면:</b> 적외선을 대부분 반사하여 반사율이 높습니다. (센서 수광부에 도달하는 적외선 양이 많음)</li>
+        </ul>
+        <p>이러한 반사율 차이를 이용하여 센서는 현재 자신이 검은 선 위에 있는지, 아니면 흰 바닥 위에 있는지를 판단할 수 있습니다. RC카가 이 센서들을 이용하여 선을 따라가도록 만드는 것이 **라인 트레이싱**입니다.</p>
+        <div class="image-container">
+            <img src="ir_sensor_working_principle.png" alt="적외선 센서 작동 원리">
+            <p><i>(적외선 발광부와 수광부가 검은 선과 흰 바닥에서 적외선을 반사/흡수하는 원리를 보여주는 다이어그램을 삽입해 주세요.)</i></p>
+        </div>
+
+        <h3>⚙️ 2. 라인 트레이서 센서 회로 연결하기 (단일 센서 테스트)</h3>
+        <p>먼저 하나의 라인 트레이서 센서로 기본적인 작동을 이해해 볼게요. 라인 트레이서 센서는 보통 **디지털 출력**을 가집니다. 즉, 검은 선을 감지하면 HIGH/LOW 중 하나를, 흰색 바닥을 감지하면 다른 하나를 출력합니다. (센서 종류에 따라 반전될 수 있음)</p>
+        <h4>준비물:</h4>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>브레드보드</li>
+            <li>라인 트레이서 센서 모듈 (예: TCRT5000 또는 비슷한 디지털 출력 센서) 1개</li>
+            <li>점퍼선 (수-수)</li>
+            <li>LED 1개 (옵션, 센서 상태 시각화용)</li>
+            <li>220옴 저항 1개 (옵션, LED용)</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <ol>
+            <li>**브레드보드 전원 연결**:
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**라인 트레이서 센서 연결**:
+                <ul>
+                    <li>센서의 **VCC 핀**을 브레드보드의 **빨간색 (+) 라인(5V)**에 연결합니다.</li>
+                    <li>센서의 **GND 핀**을 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                    <li>센서의 **DOUT (또는 SIG) 핀**을 아두이노의 **디지털 핀 7번**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**LED 연결 (옵션)**:
+                <ul>
+                    <li>LED의 긴 다리(+)를 220옴 저항에 연결하고, 저항의 다른 쪽을 아두이노 **디지털 핀 6번**에 연결합니다.</li>
+                    <li>LED의 짧은 다리(-)를 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_ir_sensor_single_circuit.png" alt="아두이노 단일 적외선 센서 연결 회로도">
+            <p><i>(아두이노, 브레드보드, 단일 라인 트레이서 센서(적외선 센서), 선택적으로 LED가 연결된 정확한 회로도 이미지를 삽입해 주세요. 각 핀의 연결을 명확히 보여주세요.)</i></p>
+        </div>
+        <p class="caution"><b>주의!</b> 라인 트레이서 센서는 종류에 따라 DOUT 핀의 출력 논리(HIGH/LOW)가 다를 수 있습니다. 일부 센서는 검은 선에서 LOW를, 흰색 바닥에서 HIGH를 출력하고, 어떤 센서는 그 반대일 수 있습니다. 코딩 후 시리얼 모니터로 확인하며 조정해야 합니다.</p>
+
+        <h3>📝 3. 코딩하기: 단일 라인 트레이서 센서 테스트</h3>
+        <p>하나의 라인 트레이서 센서가 바닥 색깔에 따라 어떻게 값이 변하는지 시리얼 모니터로 확인하는 코드예요.</p>
+        <pre><code class="language-cpp">// 아두이노 RC카 교실 - 8주차 1회차: 단일 라인 트레이서 센서 테스트 예제
+
+const int IR_SENSOR_PIN = 7; // 라인 트레이서 센서의 DOUT(또는 SIG) 핀 연결
+const int LED_PIN = 6;       // 센서 감지 시 켜질 LED 핀 (옵션)
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("라인 트레이서 센서 테스트 시작!");
+
+  pinMode(IR_SENSOR_PIN, INPUT); // 센서 핀을 입력으로 설정
+  pinMode(LED_PIN, OUTPUT);      // LED 핀을 출력으로 설정 (옵션)
+}
+
+void loop() {
+  int sensorValue = digitalRead(IR_SENSOR_PIN); // 센서 값 읽기 (HIGH 또는 LOW)
+
+  Serial.print("센서 값: ");
+  Serial.println(sensorValue);
+
+  // 센서 값에 따라 LED 제어 (옵션)
+  // 대부분의 센서는 검은색을 감지하면 LOW, 흰색을 감지하면 HIGH를 출력합니다.
+  // 만약 반대로 작동한다면 아래 if 문 조건을 바꿔주세요.
+  if (sensorValue == LOW) { // 검은 선 감지 시 (센서 종류에 따라 HIGH일 수도 있음)
+    digitalWrite(LED_PIN, HIGH); // LED 켜기
+    Serial.println(" -> 검은 선 감지!");
+  } else { // 흰색 바닥 감지 시
+    digitalWrite(LED_PIN, LOW); // LED 끄기
+    Serial.println(" -> 흰색 바닥 감지!");
+  }
+
+  delay(100); // 0.1초마다 센서 값 확인
+}
+</code></pre>
+        <h4>코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight"><code>digitalRead(IR_SENSOR_PIN)</code></span>: <code>IR_SENSOR_PIN</code>에 연결된 디지털 센서의 값을 읽어옵니다. 이 값은 <code>HIGH</code> (논리 1, 약 5V) 또는 <code>LOW</code> (논리 0, 약 0V) 중 하나입니다.</li>
+            <li><span class="highlight"><code>if (sensorValue == LOW)</code></span>: 읽어온 센서 값이 <code>LOW</code>와 같은지 확인하는 조건문입니다. 대부분의 디지털 라인 트레이서 센서는 검은 선 위에서 LOW 신호를 출력합니다. (흰 바닥 위에서는 HIGH)</li>
+        </ul>
+
+        <h3>✅ 4. 결과 확인</h3>
+        <ol>
+            <li>코드를 아두이노에 업로드합니다.</li>
+            <li>시리얼 모니터를 엽니다.</li>
+            <li>센서를 흰색 종이 위에 놓았을 때와 검은색 테이프 위에 놓았을 때 시리얼 모니터에 출력되는 센서 값(<code>0</code> 또는 <code>1</code>)이 어떻게 변하는지 확인합니다.</li>
+            <li>(옵션) LED를 연결했다면, 검은 선을 감지할 때 LED가 켜지는지(또는 꺼지는지) 확인합니다.</li>
+        </ol>
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>센서의 감도를 조절하는 가변 저항(Potentiometer)이 있다면, 돌려가면서 시리얼 모니터 값 변화를 관찰해 보세요.</li>
+                <li>센서가 검은 선에서 <code>HIGH</code>를, 흰색 바닥에서 <code>LOW</code>를 출력한다면 코드의 <code>if</code>문 조건을 수정해 보세요.</li>
+                <li>센서 값에 따라 다른 메시지를 출력해 보세요.</li>
+            </ul>
+        </div>
+
+        <hr>
+        <br>
+
+        <h2>2회차: RC카 라인 트레이서 구현</h2>
+
+        <h3>🤖 1. 라인 트레이서 알고리즘 구상</h3>
+        <p>여러 개의 라인 트레이서 센서(보통 2~5개)를 RC카 바닥에 일렬로 부착하여 선을 감지하고, 그에 따라 RC카의 움직임을 제어하는 것이 라인 트레이싱의 핵심입니다.</p>
+        <div class="image-container">
+            <img src="line_follower_sensor_array.png" alt="라인 트레이서 센서 배열 이미지">
+            <p><i>(RC카 바닥에 3~5개의 라인 트레이서 센서가 일렬로 부착된 모습의 이미지 또는 다이어그램을 삽입해 주세요. 각 센서가 중앙, 좌, 우 등을 나타내도록 표시.)</i></p>
+        </div>
+        <h4>가장 기본적인 3개 센서 라인 트레이서 알고리즘:</h4>
+        <ol>
+            <li>**중앙 센서가 검은 선 감지:** 직진한다.</li>
+            <li>**왼쪽 센서가 검은 선 감지:** 오른쪽으로 회전하여 선을 찾는다. (오른쪽 바퀴를 빠르게 돌리거나, 왼쪽 바퀴를 멈추거나 후진)</li>
+            <li>**오른쪽 센서가 검은 선 감지:** 왼쪽으로 회전하여 선을 찾는다. (왼쪽 바퀴를 빠르게 돌리거나, 오른쪽 바퀴를 멈추거나 후진)</li>
+            <li>**모든 센서가 흰색 바닥 감지 (선을 잃었을 때):** 직전 방향으로 회전을 계속하거나, 잠시 정지 후 탐색한다. (이 부분은 정밀도와 안정성을 위해 중요한 부분)</li>
+        </ol>
+        <p class="note"><b>참고:</b> 센서의 개수가 많을수록(예: 5개) 더 부드럽고 정교한 라인 트레이싱이 가능합니다. 여기서는 3개 센서 기준으로 설명합니다.</p>
+
+        <h3>⚙️ 2. 통합 회로 연결: 라인 트레이서 RC카</h3>
+        <p>6주차에서 사용한 모든 부품(모터 드라이버, DC 모터, 배터리)에 라인 트레이서 센서들을 추가로 연결해야 합니다. 블루투스나 초음파 센서는 이번 라인 트레이서 기능에 직접 사용되지 않으므로, 잠시 분리하거나 핀을 사용하지 않도록 코딩할 수 있습니다.</p>
+        <h4>준비물:</h4>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>L298N 모터 드라이버 모듈 1개</li>
+            <li>DC 모터 2개</li>
+            <li>9V 건전지 및 건전지 스냅 (모터 드라이버용 외부 전원)</li>
+            <li>**라인 트레이서 센서 모듈 3개** (예: TCRT5000 또는 센서 3개가 통합된 모듈)</li>
+            <li>점퍼선 (수-수)</li>
+            <li>브레드보드 (선택 사항)</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <ol>
+            <li>**전원 및 접지 연결**:
+                <ul>
+                    <li>아두이노 GND -> L298N GND -> 모든 라인 트레이서 센서 GND (모두 연결)</li>
+                    <li>아두이노 5V -> 모든 라인 트레이서 센서 VCC (모두 연결)</li>
+                    <li>9V 배터리 (+) -> L298N +12V</li>
+                    <li>9V 배터리 (-) -> L298N GND (아두이노 GND와 이미 연결됨)</li>
+                </ul>
+            </li>
+            <li>**DC 모터 연결 (L298N)**: (3주차 1회차와 동일)
+                <ul>
+                    <li>좌측 모터: OUT1, OUT2</li>
+                    <li>우측 모터: OUT3, OUT4</li>
+                    <li>아두이노 핀 7 -> IN1</li>
+                    <li>아두이노 핀 6 -> IN2</li>
+                    <li>아두이노 핀 5 -> IN3</li>
+                    <li>아두이노 핀 4 -> IN4</li>
+                    <li>아두이노 핀 9 (PWM) -> ENA (좌측 모터 속도)</li>
+                    <li>아두이노 핀 10 (PWM) -> ENB (우측 모터 속도)</li>
+                </ul>
+            </li>
+            <li>**라인 트레이서 센서 연결 (3개)**:
+                <ul>
+                    <li>**왼쪽 센서(Left IR Sensor) DOUT** -> 아두이노 **디지털 핀 2번**</li>
+                    <li>**중앙 센서(Center IR Sensor) DOUT** -> 아두이노 **디지털 핀 3번**</li>
+                    <li>**오른쪽 센서(Right IR Sensor) DOUT** -> 아두이노 **디지털 핀 4번**</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_rc_car_line_follower_full_circuit.png" alt="아두이노 RC카 라인 트레이서 전체 회로도">
+            <p><i>(아두이노, L298N, DC 모터 2개, 라인 트레이서 센서 3개가 모두 연결된 회로도 이미지를 삽입해 주세요. 각 센서의 위치와 아두이노 핀 연결을 명확히 보여주세요.)</i></p>
+        </div>
+        <p class="caution"><b>주의!</b> 핀 번호가 변경되었으니 코드를 작성할 때 핀 번호를 정확히 맞춰주세요. 모터 제어 핀(7,6,5,4,9,10) 외에 라인 트레이서 센서 핀으로 2, 3, 4번 핀을 사용했습니다. 센서 출력 논리(HIGH/LOW)는 1회차 테스트 후 코드를 수정해야 합니다.</p>
+
+        <h3>📝 3. 코딩하기: RC카 라인 트레이서 주행</h3>
+        <p>앞서 구상한 3개 센서 라인 트레이서 알고리즘을 아두이노 코드로 구현합니다. RC카의 움직임을 제어하는 함수들은 6주차에서 사용했던 함수들을 재활용합니다.</p>
+        <pre><code class="language-cpp">// 아두이노 RC카 교실 - 8주차 2회차: RC카 라인 트레이서 주행 예제
+
+// ======= 모터 드라이버 핀 설정 (6주차 2회차와 동일) =======
+const int motor1_IN1 = 7; 
+const int motor1_IN2 = 6;
+const int motor1_ENA = 9;  // PWM 핀
+
+const int motor2_IN3 = 5;
+const int motor2_IN4 = 4;
+const int motor2_ENB = 10; // PWM 핀
+
+int motorSpeed = 150; // RC카 주행 속도 (0~255)
+
+// ======= 라인 트레이서 센서 핀 설정 =======
+// DOUT 핀 연결 (디지털 핀)
+const int LEFT_SENSOR_PIN   = 2; 
+const int CENTER_SENSOR_PIN = 3;
+const int RIGHT_SENSOR_PIN  = 4;
+
+// 센서가 검은 선을 감지했을 때의 값 (HIGH 또는 LOW)
+// 1회차 테스트 후 이 값을 정확히 설정해야 합니다.
+// 대부분의 센서는 검은 선에서 LOW를 출력합니다.
+const int BLACK = LOW;  
+const int WHITE = HIGH;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("RC카 라인 트레이서 주행 시작!");
+
+  // 모터 핀 설정
+  pinMode(motor1_IN1, OUTPUT);
+  pinMode(motor1_IN2, OUTPUT);
+  pinMode(motor1_ENA, OUTPUT);
+  pinMode(motor2_IN3, OUTPUT);
+  pinMode(motor2_IN4, OUTPUT);
+  pinMode(motor2_ENB, OUTPUT);
+  stopMotors(); // 초기 모터 정지
+
+  // 라인 트레이서 센서 핀 모드 설정
+  pinMode(LEFT_SENSOR_PIN, INPUT);
+  pinMode(CENTER_SENSOR_PIN, INPUT);
+  pinMode(RIGHT_SENSOR_PIN, INPUT);
+}
+
+void loop() {
+  // 각 센서의 값 읽기
+  int leftSensor   = digitalRead(LEFT_SENSOR_PIN);
+  int centerSensor = digitalRead(CENTER_SENSOR_PIN);
+  int rightSensor  = digitalRead(RIGHT_SENSOR_PIN);
+
+  // 시리얼 모니터로 센서 상태 확인 (디버깅용)
+  Serial.print("L: "); Serial.print(leftSensor);
+  Serial.print(" | C: "); Serial.print(centerSensor);
+  Serial.print(" | R: "); Serial.print(rightSensor);
+  
+  // 라인 트레이싱 로직
+  if (centerSensor == BLACK) { // 중앙 센서가 검은 선을 감지
+    moveForward(); // 직진
+    Serial.println(" -> 직진");
+  } else if (leftSensor == BLACK) { // 왼쪽 센서가 검은 선을 감지 (선을 왼쪽으로 이탈)
+    turnRight(); // 오른쪽으로 회전하여 선을 찾음
+    Serial.println(" -> 우회전 (왼쪽 이탈)");
+  } else if (rightSensor == BLACK) { // 오른쪽 센서가 검은 선을 감지 (선을 오른쪽으로 이탈)
+    turnLeft(); // 왼쪽으로 회전하여 선을 찾음
+    Serial.println(" -> 좌회전 (오른쪽 이탈)");
+  } else { // 모든 센서가 흰색 바닥을 감지 (선을 잃었을 때)
+    // 이 부분은 RC카가 선을 잃었을 때의 대처 방안입니다.
+    // 이전 움직임을 유지하거나, 잠시 후진 후 탐색하거나, 특정 방향으로 회전할 수 있습니다.
+    // 여기서는 가장 최근에 회전한 방향을 유지하는 방식 (또는 마지막 감지 방향으로)으로 가정을 합니다.
+    // 더 복잡한 로직은 state machine 또는 PID 제어를 사용합니다.
+    stopMotors(); // 일단 정지 (테스트용)
+    // moveBackward(); // 후진해서 선을 다시 찾거나
+    // delay(200);
+    // turnRight(); // 특정 방향으로 회전하며 선을 탐색
+    // delay(300);
+    // stopMotors();
+    Serial.println(" -> 선을 잃음 (정지)");
+  }
+  delay(10); // 센서 값 읽고 제어하는 주기
+}
+
+// RC카 전진 함수 (6주차와 동일, 속도 변수 사용)
+void moveForward() {
+  digitalWrite(motor1_IN1, HIGH);
+  digitalWrite(motor1_IN2, LOW);
+  analogWrite(motor1_ENA, motorSpeed);
+
+  digitalWrite(motor2_IN3, HIGH); 
+  digitalWrite(motor2_IN4, LOW);
+  analogWrite(motor2_ENB, motorSpeed);
+}
+
+// RC카 정지 함수 (6주차와 동일)
+void stopMotors() {
+  digitalWrite(motor1_IN1, LOW);
+  digitalWrite(motor1_IN2, LOW);
+  analogWrite(motor1_ENA, 0); 
+
+  digitalWrite(motor2_IN3, LOW);
+  digitalWrite(motor2_IN4, LOW);
+  analogWrite(motor2_ENB, 0); 
+}
+
+// RC카 왼쪽으로 회전 함수 (6주차와 동일, 제자리 회전)
+void turnLeft() {
+  digitalWrite(motor1_IN1, LOW); // 왼쪽 바퀴 후진
+  digitalWrite(motor1_IN2, HIGH);
+  analogWrite(motor1_ENA, motorSpeed);
+
+  digitalWrite(motor2_IN3, HIGH); // 오른쪽 바퀴 전진
+  digitalWrite(motor2_IN4, LOW);
+  analogWrite(motor2_ENB, motorSpeed);
+}
+
+// RC카 오른쪽으로 회전 함수 (6주차와 동일, 제자리 회전)
+void turnRight() {
+  digitalWrite(motor1_IN1, HIGH); // 왼쪽 바퀴 전진
+  digitalWrite(motor1_IN2, LOW);
+  analogWrite(motor1_ENA, motorSpeed);
+
+  digitalWrite(motor2_IN3, LOW); // 오른쪽 바퀴 후진
+  digitalWrite(motor2_IN4, HIGH);
+  analogWrite(motor2_ENB, motorSpeed);
+}
+// moveBackward() 함수는 라인 트레이서에서는 잘 사용되지 않아 삭제함
+</code></pre>
+        <p class="note"><b>참고:</b> <code>BLACK</code>과 <code>WHITE</code> 상수는 1회차 테스트 결과에 따라 <code>HIGH</code>/<code>LOW</code> 값을 정확히 설정해야 합니다. 예를 들어, 센서가 검은 선에서 <code>HIGH</code>를 출력한다면, <code>const int BLACK = HIGH;</code>로 변경해야 합니다.</p>
+        <h4>코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight"><code>LEFT_SENSOR_PIN</code>, <code>CENTER_SENSOR_PIN</code>, <code>RIGHT_SENSOR_PIN</code></span>: 3개의 라인 트레이서 센서가 연결된 아두이노 핀 번호입니다.</li>
+            <li><span class="highlight"><code>BLACK</code>, <code>WHITE</code></span>: 센서가 검은색과 흰색을 감지했을 때의 디지털 값(HIGH 또는 LOW)을 상수로 정의하여 코드 가독성을 높였습니다. 1회차 테스트 후 정확한 값을 입력해야 합니다.</li>
+            <li><span class="highlight"><code>digitalRead()</code></span>: 각 센서의 현재 상태(검은 선 또는 흰 바닥)를 읽어옵니다.</li>
+            <li>**라인 트레이싱 로직(<code>if/else if</code>)**:
+                <ul>
+                    <li><code>centerSensor == BLACK</code>: 중앙 센서가 선을 감지했으므로, RC카는 **직진**합니다.</li>
+                    <li><code>leftSensor == BLACK</code>: 왼쪽 센서가 선을 감지했다는 것은 RC카가 선에서 오른쪽으로 벗어났다는 의미이므로, RC카는 **오른쪽으로 회전**하여 선을 다시 찾습니다.</li>
+                    <li><code>rightSensor == BLACK</code>: 오른쪽 센서가 선을 감지했다는 것은 RC카가 선에서 왼쪽으로 벗어났다는 의미이므로, RC카는 **왼쪽으로 회전**하여 선을 다시 찾습니다.</li>
+                    <li><code>else</code>: 모든 센서가 흰색 바닥을 감지했다면, RC카는 선을 잃은 상태입니다. 이 경우 **정지**하거나, 마지막으로 움직였던 방향으로 회전을 유지하거나, 잠시 후진 후 탐색하는 등 다양한 방법으로 대처할 수 있습니다. 위 예시에서는 일단 정지하도록 코딩했습니다.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>✅ 4. 결과 확인 및 라인 트레이서 테스트</h3>
+        <ol>
+            <li>코드를 아두이노에 업로드합니다.</li>
+            <li>검은색 테이프나 선을 이용하여 RC카가 주행할 트랙을 만듭니다. (바닥은 흰색이 좋습니다.)</li>
+            <li>RC카를 트랙 위에 놓고 전원을 켜서 라인 트레이싱이 시작되는지 확인합니다.</li>
+            <li>RC카가 선을 따라 부드럽게 주행하는지 관찰하고, 너무 많이 흔들리거나 선을 자주 놓친다면 <code>motorSpeed</code> 값이나 회전 함수(<code>turnLeft</code>, <code>turnRight</code>)의 구현 방식을 조절해 보세요.</li>
+        </ol>
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>RC카의 속도(<code>motorSpeed</code>)를 조절하여 라인 트레이싱 성능을 최적화해 보세요.</li>
+                <li>RC카가 선을 잃었을 때(<code>else</code> 문) **이전 움직임을 유지**하도록 코드를 수정해 보세요. (예: 마지막으로 회전했던 방향으로 계속 회전)</li>
+                <li>센서의 개수를 5개로 늘리고, 더 정교한 라인 트레이싱 알고리즘을 구상하여 구현해 보세요. (예: <code>11001</code> 패턴 감지 시 큰 회전, <code>01110</code> 패턴 감지 시 직진 등)</li>
+                <li>라인 트레이싱 주행 중 특정 지점에서 음악을 재생하거나 LED 색을 바꾸는 등의 추가 기능을 넣어 보세요.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2>❓ 궁금증 해결 시간</h2>
+        <p>오늘은 RC카가 스스로 선을 따라가는 라인 트레이서 기능을 구현했어요. 초음파 센서와는 또 다른 형태의 자율 주행이었죠? 센서 값에 따라 RC카가 어떻게 반응해야 하는지 정교하게 프로그래밍하는 것이 라인 트레이싱의 핵심입니다. 혹시 이해가 잘 안 되거나 더 궁금한 점이 있나요? 무엇이든 질문해주세요!</p>
+
+        <hr>
+
+        <p>축하합니다! 아두이노 RC카 만들기 프로젝트의 여덟 번째 주도 성공적으로 마쳤어요. 라인 트레이서 RC카를 통해 자율 주행의 또 다른 재미와 심화를 경험했답니다. 다음 시간에는 RC카에 정보를 표시할 수 있는 LCD 모듈을 연결하고 제어하는 방법을 배울 거예요. 오늘 배운 라인 트레이싱 알고리즘을 잘 이해하고, 스스로 해보기 미션도 꼭 도전해 보세요!</p>
+    </div>
+</body>
+</html>

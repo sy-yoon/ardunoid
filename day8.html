@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노이드 교실 4주차 2회차 교재: 적외선 통신 (IR 센서와 리모컨)</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 4px solid #f39c12;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노이드 교실 4주차 2회차 교재: 적외선 통신 (IR 센서와 리모컨)</h1>
+
+        <hr>
+
+        <h2>💡 오늘의 목표</h2>
+        <ul>
+            <li><b>적외선(IR) 통신</b>이 무엇인지 이해하고, 우리 주변에서 어떻게 사용되는지 알아봐요.</li>
+            <li><b>IR 수신 센서</b>를 아두이노에 연결하고, 리모컨 신호를 읽어오는 방법을 배워요.</li>
+            <li>읽어온 리모컨 신호를 활용하여 <b>LED를 제어</b>하는 방법을 익혀요.</li>
+            <li>리모컨으로 아두이노를 제어하는 <b>'리모컨 제어 조명 시스템'</b>을 만들어봐요!</li>
+        </ul>
+
+        <hr>
+
+        <h2>📡 1. 적외선(IR) 통신: 보이지 않는 빛으로 대화하기</h2>
+        <p>우리 주변에는 눈에 보이지 않는 빛으로 통신하는 기술들이 아주 많아요! 대표적인 것이 바로 TV 리모컨이에요. 리모컨을 누르면 TV가 켜지거나 채널이 바뀌죠? 이때 사용되는 것이 **적외선(InfraRed, IR) 통신**이에요.</p>
+        <p>적외선은 우리 눈에는 보이지 않지만, 마치 빛처럼 직진하는 성질을 가지고 있어요. 이 적외선에 특별한 암호(신호)를 실어서 보내면, 적외선 수신기가 이 신호를 받아서 해석하는 방식으로 작동한답니다.</p>
+
+        <h3>IR 통신 부품:</h3>
+        <ul>
+            <li><b>IR 송신기 (리모컨)</b>: 적외선 LED가 내장되어 있어 버튼을 누르면 특정 신호를 담은 적외선 빛을 발사해요.</li>
+            <li><b>IR 수신기 (IR Receiver)</b>: 리모컨이 보낸 적외선 신호를 감지하고, 이 신호를 아두이노가 이해할 수 있는 전기 신호로 바꿔줘요.</li>
+        </ul>
+        <p class="note"><b>팁!</b> 스마트폰 카메라로 TV 리모컨의 앞부분을 비추고 버튼을 눌러보세요. 보라색 불빛이 깜빡이는 것이 보일 거예요. 이게 바로 적외선이 발사되는 모습이랍니다!</p>
+
+        <hr>
+
+        <h2>🛠️ 2. 회로 연결 및 코딩 준비</h2>
+
+        **준비물:**
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>USB 케이블</li>
+            <li>브레드보드</li>
+            <li>점퍼선 (수-수)</li>
+            <li>IR 수신 센서 (VS1838B 또는 유사 모듈) 1개</li>
+            <li>IR 리모컨 (미니 IR 리모컨) 1개</li>
+            <li>LED 1개</li>
+            <li>저항 1개 (220옴 또는 330옴, LED용)</li>
+        </ul>
+
+        <h3>회로 연결:</h3>
+        <p>IR 수신 센서는 보통 3개의 핀을 가지고 있어요 (GND, VCC, Signal). 센서마다 핀 배열이 다를 수 있으니, 구매한 센서의 핀 설명을 꼭 확인하세요.</p>
+        <ol>
+            <li><b>IR 수신 센서 연결</b>:
+                <ul>
+                    <li>IR 수신 센서의 <b>GND 핀</b>을 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                    <li>IR 수신 센서의 <b>VCC 핀</b>을 아두이노의 <b>5V 핀</b>에 연결해요.</li>
+                    <li>IR 수신 센서의 <b>Signal 핀 (OUT)</b>을 아두이노의 <b>디지털 핀 2번</b>에 연결해요.</li>
+                </ul>
+            </li>
+            <li><b>LED 연결</b>:
+                <ul>
+                    <li>LED의 <b>긴 다리(+)</b>를 저항에 연결하고, 저항의 다른 쪽 다리를 아두이노의 <b>디지털 핀 13번</b>에 연결해요.</li>
+                    <li>LED의 <b>짧은 다리(-)</b>를 아두이노의 <b>GND 핀</b>에 연결해요.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><i>(이 부분에는 IR 수신 센서와 LED가 아두이노의 각 핀에 연결된 회로도 이미지를 넣어주시면 좋습니다. 특히 IR 수신 센서의 핀아웃에 대한 설명이 포함되면 좋아요.)</i></p>
+
+        <h3>코딩 준비: 라이브러리 추가</h3>
+        <p>IR 신호를 쉽고 정확하게 읽으려면 `IRremote` 라이브러리가 필요해요.</p>
+        <ol>
+            <li>아두이노 IDE 메뉴에서 `스케치(Sketch)` → `라이브러리 포함하기(Include Library)` → `라이브러리 관리...(Manage Libraries...)`를 클릭해요.</li>
+            <li>검색창에 "IRremote"라고 입력하고, `IRremote by shirriff` (또는 최신 호환 버전)을 찾아 설치해요.</li>
+        </ol>
+
+        <h3>리모컨 신호 값 확인하기:</h3>
+        <p>모든 리모컨 버튼은 고유한 신호 값을 가지고 있어요. 이 값을 알아야 코딩할 때 어떤 버튼이 눌렸는지 판단할 수 있어요. 먼저 이 값을 확인해 봅시다.</p>
+        <pre><code>#include &lt;IRremote.h&gt; // IRremote 라이브러리 포함
+
+const int IR_RECEIVE_PIN = 2; // IR 수신 센서의 Signal 핀 번호
+
+IRrecv irrecv(IR_RECEIVE_PIN); // IR 수신 객체 생성
+decode_results results;        // 수신된 결과를 저장할 변수
+
+void setup() {
+  Serial.begin(9600); // 시리얼 통신 시작
+  irrecv.enableIRIn(); // IR 수신 활성화
+  Serial.println("IR 리모컨 신호 대기 중...");
+}
+
+void loop() {
+  if (irrecv.decode(&results)) { // IR 신호가 수신되면
+    Serial.print("수신된 신호: 0x"); // 16진수 형태로 출력
+    Serial.println(results.value, HEX); // 수신된 신호 값 출력 (HEX: 16진수)
+    irrecv.resume(); // 다음 신호를 받기 위해 수신 모드를 재개
+  }
+  delay(100); // 짧은 딜레이
+}</code></pre>
+        <p>이 코드를 아두이노에 업로드한 후 시리얼 모니터를 열고, IR 수신 센서를 향해 리모컨 버튼을 하나씩 눌러보세요. 버튼마다 고유한 16진수(예: `0xFF30CF`, `0xFFA25D`) 값이 시리얼 모니터에 출력될 거예요. 이 값들을 메모해 두세요. 나중에 이 값들을 사용하여 LED를 제어할 겁니다.</p>
+
+        <hr>
+
+        <h2>💡 3. 프로젝트: 리모컨 제어 조명 시스템 만들기</h2>
+        <p>이제 IR 수신 센서와 리모컨, 그리고 LED를 활용하여 리모컨 버튼으로 LED를 켜고 끄는 '리모컨 제어 조명 시스템'을 만들어 볼 거예요.</p>
+
+        <h3>아이디어:</h3>
+        1.  리모컨의 '전원' 버튼을 누르면 LED가 켜지거나 꺼져요.
+        2.  리모컨의 '밝기 증가' 버튼을 누르면 LED가 더 밝아져요.
+        3.  리모컨의 '밝기 감소' 버튼을 누르면 LED가 더 어두워져요.
+        4.  (선택 사항) 다른 버튼을 누르면 특정 동작(예: 깜빡이기)을 하도록 만들어요.
+
+        <h3>코딩하기:</h3>
+        <p>아래 코드를 아두이노 IDE에 붙여 넣고 업로드해 보세요. **(중요: 아래 코드의 `POWER_KEY`, `BRIGHT_UP_KEY`, `BRIGHT_DOWN_KEY` 값은 여러분이 시리얼 모니터에서 확인한 실제 리모컨 버튼의 16진수 값으로 바꿔주세요!)**</p>
+        <pre><code>#include &lt;IRremote.h&gt; // IRremote 라이브러리 포함
+
+// IR 수신 센서와 LED 핀 정의
+const int IR_RECEIVE_PIN = 2; // IR 수신 센서 Signal 핀
+const int LED_PIN = 13;       // LED가 연결된 핀
+
+IRrecv irrecv(IR_RECEIVE_PIN); // IR 수신 객체 생성
+decode_results results;        // 수신된 결과를 저장할 변수
+
+// 각 리모컨 버튼의 16진수 값 (***여러분의 리모컨에 맞춰 이 값을 수정하세요!***)
+// 예시 값입니다. 시리얼 모니터로 확인한 값으로 변경해야 합니다.
+#define POWER_KEY       0xFF30CF   // 전원 버튼 (On/Off)
+#define BRIGHT_UP_KEY   0xFF18E7   // 밝기 증가 버튼
+#define BRIGHT_DOWN_KEY 0xFF4AB5   // 밝기 감소 버튼
+#define MODE_KEY        0xFF906F   // 모드 버튼 (깜빡이기 등)
+
+int ledBrightness = 0; // LED 현재 밝기 (0~255)
+bool ledIsOn = false;  // LED 켜짐/꺼짐 상태
+
+void setup() {
+  Serial.begin(9600);
+  irrecv.enableIRIn(); // IR 수신 활성화
+  pinMode(LED_PIN, OUTPUT);
+  Serial.println("리모컨 제어 조명 시스템 준비 완료!");
+  Serial.println("리모컨으로 LED를 제어하세요.");
+}
+
+void loop() {
+  if (irrecv.decode(&results)) { // IR 신호가 수신되면
+    Serial.print("수신된 신호: 0x");
+    Serial.println(results.value, HEX);
+
+    switch (results.value) { // 수신된 신호 값에 따라 동작 결정
+      case POWER_KEY:
+        ledIsOn = !ledIsOn; // 상태 반전 (켜져있으면 끄고, 꺼져있으면 뭄)
+        if (ledIsOn) {
+          ledBrightness = 255; // 켜질 때 최대 밝기로
+          Serial.println("LED ON");
+        } else {
+          ledBrightness = 0;   // 꺼질 때 밝기 0으로
+          Serial.println("LED OFF");
+        }
+        break; // switch 문 종료
+
+      case BRIGHT_UP_KEY:
+        if (ledIsOn) { // LED가 켜져 있을 때만 밝기 조절
+          ledBrightness += 25; // 밝기 25 증가
+          if (ledBrightness > 255) ledBrightness = 255; // 최대 밝기 초과 방지
+          Serial.print("밝기 증가: ");
+          Serial.println(ledBrightness);
+        }
+        break;
+
+      case BRIGHT_DOWN_KEY:
+        if (ledIsOn) { // LED가 켜져 있을 때만 밝기 조절
+          ledBrightness -= 25; // 밝기 25 감소
+          if (ledBrightness < 0) ledBrightness = 0; // 최소 밝기 미만 방지
+          Serial.print("밝기 감소: ");
+          Serial.println(ledBrightness);
+        }
+        break;
+
+      case MODE_KEY: // 선택 사항: 특정 버튼 누르면 깜빡이기
+        if (ledIsOn) {
+            Serial.println("LED 깜빡이기 모드");
+            for(int i=0; i<3; i++) { // 3번 깜빡임
+                digitalWrite(LED_PIN, HIGH);
+                delay(100);
+                digitalWrite(LED_PIN, LOW);
+                delay(100);
+            }
+            analogWrite(LED_PIN, ledBrightness); // 원래 밝기로 돌아옴
+        }
+        break;
+
+      default: // 그 외의 버튼이 눌리면
+        Serial.println("알 수 없는 버튼");
+        break;
+    }
+
+    // 현재 LED 밝기 적용 (깜빡이기 모드 제외)
+    // 참고: LED_PIN이 PWM 지원 핀이어야 analogWrite가 제대로 작동합니다. (13번은 보통 지원)
+    if (results.value != MODE_KEY) { // 모드 키가 아니면 일반 밝기 조절
+        analogWrite(LED_PIN, ledBrightness);
+    }
+    
+    irrecv.resume(); // 다음 신호를 받기 위해 수신 모드를 재개
+  }
+}

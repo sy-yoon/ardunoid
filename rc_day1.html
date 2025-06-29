@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노 RC카 교실 1주차 교재: 아두이노 시작과 기본 입출력</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+        h4 {
+            color: #1a5276;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #eaf6ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            border: 1px solid #c0d8e8;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 5px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .image-container img {
+            max-width: 90%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .caution {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노 RC카 교실 1주차 교재: 아두이노 시작과 기본 입출력</h1>
+
+        <hr>
+
+        <h2>💡 이번 주 학습 목표</h2>
+        <ul>
+            <li>**아두이노**와 처음 만나보고, 개발 환경을 설정하는 방법을 배워요.</li>
+            <li>가장 간단한 전자 부품인 **LED**를 아두이노로 켜고 끄는 방법을 익혀요.</li>
+            <li>사람의 조작(버튼)을 아두이노가 인식하는 **디지털 입력**의 원리를 이해해요.</li>
+            <li>**PWM(펄스 폭 변조)**을 이용해 LED의 밝기를 섬세하게 조절하는 방법을 배워요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>1회차: 아두이노 첫 만남! LED 켜고 끄기</h2>
+
+        <h3>✨ 1. 아두이노란 무엇일까요?</h3>
+        <p><b>아두이노(Arduino)</b>는 마이크로컨트롤러 보드를 기반으로 한 오픈 소스 하드웨어 플랫폼이에요. 쉽게 말해, 우리가 코딩(프로그래밍)한 명령에 따라 센서에서 정보를 읽어들이고, 모터나 LED 같은 부품을 제어할 수 있는 **작은 컴퓨터**라고 생각하면 돼요.</p>
+        <p>아두이노는 사용하기 쉽고, 가격도 저렴하며, 다양한 센서와 모듈을 연결할 수 있어 로봇, 스마트 홈 기기, 예술 작품 등 무궁무진한 아이디어를 현실로 만드는 데 사용되고 있어요. 우리도 아두이노를 활용해서 멋진 RC카를 직접 만들어 볼 거예요!</p>
+        <div class="image-container">
+            <img src="arduino_uno_board.png" alt="아두이노 우노 보드 이미지">
+            <p><i>(아두이노 우노 보드의 실제 사진 또는 명칭이 표시된 다이어그램을 삽입해 주세요.)</i></p>
+        </div>
+        <h4>💡 아두이노 우노 보드 주요 부분</h4>
+        <ul>
+            <li>**USB 포트**: 컴퓨터와 연결하여 전원을 공급받고 프로그램을 업로드하며 시리얼 통신을 합니다.</li>
+            <li>**전원 잭**: 9V 배터리 등 외부 전원을 연결하는 곳입니다.</li>
+            <li>**디지털 핀 (0~13)**: 디지털 신호(HIGH/LOW)를 입출력하는 핀입니다. (특히 `~` 표시가 있는 핀은 PWM 기능을 지원합니다.)</li>
+            <li>**아날로그 핀 (A0~A5)**: 아날로그 신호(연속적인 값)를 입력받는 핀입니다. (예: 센서 값 읽기)</li>
+            <li>**GND 핀**: 접지 핀입니다. 모든 회로의 기준점이 됩니다.</li>
+            <li>**5V / 3.3V 핀**: 센서나 모듈에 전원을 공급하는 핀입니다.</li>
+            <li>**리셋 버튼**: 아두이노에 업로드된 프로그램을 처음부터 다시 시작할 때 누릅니다.</li>
+        </ul>
+
+        <h3>🛠️ 2. 아두이노 개발 환경 설정</h3>
+        <p>아두이노에 명령을 내리려면 컴퓨터에 **아두이노 IDE(Integrated Development Environment)**라는 프로그램을 설치하고 설정해야 해요. 이 프로그램은 우리가 코드를 작성하고, 아두이노 보드에 업로드할 수 있도록 도와줘요.</p>
+        <ol>
+            <li><b>아두이노 IDE 다운로드 및 설치:</b>
+                <ul>
+                    <li>웹 브라우저에서 <a href="https://www.arduino.cc/en/software" target="_blank">**'arduino.cc/en/software'**</a> (아두이노 공식 웹사이트)에 접속합니다.</li>
+                    <li>'Download the Arduino IDE' 섹션에서 자신의 컴퓨터 운영체제(Windows, macOS, Linux)에 맞는 버전을 선택하여 다운로드하고 설치합니다. (Windows 사용자는 'Windows ZIP file'보다 'Windows MSI installer'를 추천합니다.)</li>
+                    <li>설치 과정 중 드라이버 설치 여부를 묻는 창이 나오면 **'설치(Install)'**를 눌러주세요.</li>
+                </ul>
+            </li>
+            <li><b>아두이노 보드 연결:</b>
+                <ul>
+                    <li>USB 케이블을 사용하여 아두이노 보드와 컴퓨터를 연결합니다.</li>
+                    <li>아두이노 보드의 전원 LED에 불이 들어오는지 확인합니다.</li>
+                </ul>
+            </li>
+            <li><b>아두이노 IDE 설정 확인:</b>
+                <ul>
+                    <li>아두이노 IDE를 실행합니다.</li>
+                    <li>메뉴에서 `툴(Tools)` → `보드(Board)` → `Arduino AVR Boards` → `Arduino Uno`를 선택합니다.</li>
+                    <li>이어서 `툴(Tools)` → `포트(Port)`에서 현재 아두이노가 연결된 **COM 포트**(Windows) 또는 `/dev/tty.usbserial-xxx`(macOS)를 선택합니다. (보통 여러 개가 보인다면 아두이노를 연결했을 때 새로 나타나는 포트가 아두이노 포트입니다.)</li>
+                </ul>
+            </li>
+        </ol>
+        <p class="note"><b>팁!</b> 포트가 보이지 않거나 연결에 문제가 있다면, 컴퓨터를 재시작하거나 다른 USB 포트에 연결해 보세요. 경우에 따라 USB-Serial 드라이버를 수동으로 설치해야 할 수도 있습니다.</p>
+
+        <h3>⚡ 3. LED와 저항의 기본 원리</h3>
+        <p><b>LED(Light Emitting Diode)</b>는 전기를 흘려주면 빛이 나는 전자 부품이에요. 하지만 LED는 정해진 양의 전류만 흘려야 안전하게 작동해요. 너무 많은 전류가 흐르면 뜨거워지거나 고장 날 수 있습니다.</p>
+        <p>이때 중요한 역할을 하는 것이 바로 **저항(Resistor)**이에요. 저항은 전류의 흐름을 방해해서 LED에 적절한 양의 전류만 흐르도록 조절해주는 역할을 합니다.</p>
+        <ul>
+            <li>**LED의 극성**: LED는 다리가 긴 쪽(+)과 짧은 쪽(-)이 있어요. 긴 쪽은 **애노드(Anode)**로 전원(+)에 연결하고, 짧은 쪽은 **캐소드(Cathode)**로 접지(-)에 연결해야 빛을 낼 수 있어요. (만약 반대로 연결하면 불이 들어오지 않아요.)</li>
+            <li>**저항 값**: LED에 사용하는 저항은 보통 <b>220옴(Ω)</b> 또는 <b>330옴(Ω)</b>을 많이 사용해요. 저항에는 색깔 띠가 있는데, 이것으로 저항 값을 알 수 있답니다.</li>
+        </ul>
+        <div class="image-container">
+            <img src="led_resistor_pins.png" alt="LED와 저항의 다리 및 극성">
+            <p><i>(LED의 긴 다리, 짧은 다리, 저항의 개념을 보여주는 그림을 삽입해 주세요.)</i></p>
+        </div>
+
+        <h3>🔌 4. 회로 연결하기: LED 깜빡이기 (Blink)</h3>
+        <p>이제 아두이노에 가장 기본적인 회로인 LED 깜빡이기를 연결해 볼 거예요. RC카의 라이트나 신호등의 기본이 된답니다!</p>
+        <h4>준비물:</h4>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>브레드보드</li>
+            <li>LED 1개 (아무 색상이나 상관없어요)</li>
+            <li>저항 1개 (220Ω 또는 330Ω)</li>
+            <li>점퍼선 (수-수 타입) 몇 개</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <ol>
+            <li>**브레드보드 전원 연결**:
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 점퍼선을 연결하여 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 점퍼선을 연결하여 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                    <li>(이렇게 하면 브레드보드의 전체 라인에 전원과 접지가 연결되어 다른 부품을 연결하기 편리해져요.)</li>
+                </ul>
+            </li>
+            <li>**LED 연결**:
+                <ul>
+                    <li>LED의 **긴 다리(+)**를 브레드보드의 아무 구멍에 꽂습니다.</li>
+                    <li>LED의 **짧은 다리(-)**를 브레드보드의 다른 구멍에 꽂습니다. (긴 다리와 같은 열에 꽂지 않도록 주의!)</li>
+                </ul>
+            </li>
+            <li>**저항 연결**:
+                <ul>
+                    <li>저항의 한쪽 다리를 LED의 **긴 다리(+)가 꽂힌 열**에 꽂습니다.</li>
+                    <li>저항의 다른 쪽 다리를 브레드보드의 새로운 열에 꽂습니다.</li>
+                </ul>
+            </li>
+            <li>**아두이노-LED 연결**:
+                <ul>
+                    <li>저항의 다른 쪽 다리(LED와 연결된 쪽)에서 점퍼선을 연결하여 아두이노의 **디지털 핀 13번**에 연결합니다.</li>
+                    <li>LED의 **짧은 다리(-)가 꽂힌 열**에서 점퍼선을 연결하여 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_led_blink_circuit.png" alt="아두이노 LED 깜빡이기 회로도">
+            <p><i>(아두이노, 브레드보드, LED, 저항이 연결된 정확한 회로도 이미지를 삽입해 주세요.)</i></p>
+        </div>
+        <p class="caution"><b>주의!</b> LED는 극성이 중요하니 꼭 긴 다리(+)와 짧은 다리(-)를 확인해서 연결하고, 저항을 꼭 사용해 주세요!</p>
+
+        <h3>📝 5. 코딩하기: LED 깜빡이는 코드</h3>
+        <p>이제 회로를 연결했으니, 아두이노에게 LED를 깜빡이게 할 명령을 내려볼까요?</p>
+        <ol>
+            <li>아두이노 IDE를 열고 새 스케치(File > New)를 만듭니다.</li>
+            <li>아래 코드를 복사하여 새 스케치에 붙여넣습니다.</li>
+        </ol>
+        <pre><code>// 아두이노 RC카 교실 - 1주차 1회차: LED 깜빡이기 예제
+
+// 1. LED가 연결된 핀 번호를 상수로 정의합니다.
+//    이렇게 하면 나중에 핀 번호를 바꿔도 이 부분만 수정하면 되어서 편리해요.
+const int ledPin = 13; 
+
+void setup() {
+  // setup() 함수는 아두이노가 시작될 때 딱 한 번 실행되는 부분입니다.
+  // 주로 핀 모드를 설정하거나, 초기에 필요한 설정을 합니다.
+
+  // ledPin (13번 핀)을 출력(OUTPUT) 모드로 설정합니다.
+  // 아두이노가 이 핀을 통해 LED에 전기를 보내 제어할 수 있게 합니다.
+  pinMode(ledPin, OUTPUT); 
+}
+
+void loop() {
+  // loop() 함수는 setup()이 실행된 후 아두이노가 전원이 켜져 있는 동안 계속해서 반복 실행하는 부분입니다.
+  // 우리가 만들 프로그램의 주요 동작이 여기에 들어갑니다.
+
+  // 1. LED 켜기: ledPin에 HIGH (높은 전압, 5V) 신호를 보냅니다.
+  //    LED는 이 신호를 받아 빛을 내기 시작합니다.
+  digitalWrite(ledPin, HIGH); 
+  
+  // 2. 1000밀리초 (1초) 동안 기다립니다.
+  //    LED가 1초 동안 켜져 있도록 합니다.
+  delay(1000);                
+
+  // 3. LED 끄기: ledPin에 LOW (낮은 전압, 0V) 신호를 보냅니다.
+  //    LED는 이 신호에 따라 빛을 끄게 됩니다.
+  digitalWrite(ledPin, LOW);  
+  
+  // 4. 1000밀리초 (1초) 동안 다시 기다립니다.
+  //    LED가 1초 동안 꺼져 있도록 합니다.
+  delay(1000);                
+}
+```</pre>
+        <h4>코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight">`//`</span>: 코드에서 이 기호 뒤에 나오는 내용은 아두이노가 무시해요. 코드를 설명하는 <b>주석</b>으로 사용됩니다.</li>
+            <li><span class="highlight">`const int ledPin = 13;`</span>: `ledPin`이라는 이름의 **변수**를 선언하고, 아두이노의 디지털 핀 **13번**을 연결하겠다고 알려주는 부분이에요. `const`는 이 값이 프로그램 실행 중에 변하지 않는다는 의미입니다.</li>
+            <li><span class="highlight">`void setup() { ... }`</span>: 아두이노 프로그램이 시작될 때 **딱 한 번만** 실행되는 특별한 함수입니다. 주로 핀 모드를 설정하는 등 초기 설정을 합니다.</li>
+            <li><span class="highlight">`void loop() { ... }`</span>: `setup()` 함수가 실행된 후, 아두이노에 전원이 연결되어 있는 동안 **무한히 반복**해서 실행되는 함수입니다. 우리가 만들 프로그램의 핵심 동작들이 여기에 들어갑니다.</li>
+            <li><span class="highlight">`pinMode(핀번호, 모드);`</span>: 아두이노 핀을 **입력(INPUT)**으로 사용할지 **출력(OUTPUT)**으로 사용할지 설정하는 함수입니다. LED를 제어하려면 `OUTPUT`으로 설정해야 해요.</li>
+            <li><span class="highlight">`digitalWrite(핀번호, 값);`</span>: 디지털 핀에 **HIGH(높은 전압, 5V)** 또는 **LOW(낮은 전압, 0V)** 신호를 내보내는 함수입니다. LED를 켜려면 `HIGH`, 끄려면 `LOW`를 사용해요.</li>
+            <li><span class="highlight">`delay(밀리초);`</span>: 주어진 **밀리초(1/1000초)**만큼 프로그램 실행을 잠시 멈추는 함수입니다. 1000은 1초를 의미해요.</li>
+        </ul>
+
+        <h3>✅ 6. 결과 확인 및 업로드</h3>
+        <ol>
+            <li>**코드 확인(Verify):** 아두이노 IDE 상단의 **체크(✓)** 아이콘을 클릭하여 작성한 코드에 오류가 없는지 확인합니다. IDE 하단 창에 "컴파일 완료" 또는 "Done compiling" 메시지가 뜨면 성공입니다.</li>
+            <li>**코드 업로드(Upload):** 아두이노 IDE 상단의 **오른쪽 화살표(→)** 아이콘을 클릭하여 코드를 아두이노 보드로 업로드합니다. IDE 하단 창에 "업로드 완료" 또는 "Done uploading" 메시지가 뜨면 성공입니다.</li>
+            <li>**작동 확인:** 아두이노에 코드가 업로드되면, 13번 핀에 연결된 LED가 1초 간격으로 켜지고 꺼지는 것을 볼 수 있을 거예요. 성공하셨다면 첫 번째 아두이노 프로젝트를 멋지게 완성한 겁니다!</li>
+        </ol>
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>`delay()` 함수 안의 숫자를 바꿔서 LED가 깜빡이는 속도를 조절해 보세요. (예: `delay(500)`은 0.5초)</li>
+                <li>`digitalWrite()` 부분을 수정해서 LED가 켜져 있는 시간과 꺼져 있는 시간을 다르게 만들어 보세요. (예: 1초 켜지고 0.5초 꺼지게)</li>
+                <li>LED를 하나 더 추가해서 두 개의 LED가 번갈아 깜빡이게 만들어 보세요. (새로운 LED는 다른 디지털 핀에 연결하고 저항도 잊지 마세요!)</li>
+            </ul>
+        </div>
+
+        <hr>
+        <br>
+
+        <h2>2회차: 버튼으로 LED 제어하기 & 밝기 조절</h2>
+
+        <h3>👆 1. 디지털 입력: 버튼으로 신호 받기</h3>
+        <p>지난 시간에는 아두이노가 LED에 명령을 내리는 '출력'을 배웠어요. 이번에는 우리가 버튼을 누르면 아두이노가 이를 감지하는 '입력'을 배워볼 거예요. **푸시 버튼 스위치**는 누르면 회로가 연결되어 전기 신호가 흐르고, 떼면 회로가 끊어지는 간단한 부품이에요.</p>
+        <p>아두이노는 이 신호를 읽어서 우리가 버튼을 눌렀는지 안 눌렀는지 판단할 수 있습니다. RC카를 리모컨이나 버튼으로 제어하는 데 꼭 필요한 개념이랍니다!</p>
+
+        <h3>🔌 2. 회로 연결하기: 버튼으로 LED 켜고 끄기</h3>
+        <p>준비물:</p>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>브레드보드</li>
+            <li>LED 1개</li>
+            <li>저항 2개 (**220Ω 또는 330Ω** - LED용 / **10kΩ** - 풀다운 저항용)</li>
+            <li>푸시 버튼 스위치 1개</li>
+            <li>점퍼선 (수-수)</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <ol>
+            <li>**브레드보드 전원 연결**: (1회차와 동일)
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**푸시 버튼 연결**:
+                <ul>
+                    <li>푸시 버튼 스위치를 브레드보드의 홈에 맞춰 꽂습니다.</li>
+                    <li>버튼의 한쪽 다리를 브레드보드의 **빨간색 (+) 라인(5V)**에 연결합니다.</li>
+                    <li>버튼의 다른 쪽 다리를 아두이노의 **디지털 핀 2번**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**풀다운 저항 연결**:
+                <ul>
+                    <li>버튼과 디지털 핀 2번이 연결된 다리에서 **10kΩ 저항**을 연결하여 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다. 이 저항을 **풀다운(Pulldown) 저항**이라고 해요.</li>
+                </ul>
+            </li>
+            <li>**LED 연결**: (1회차와 동일)
+                <ul>
+                    <li>LED의 **긴 다리(+)**를 220Ω 또는 330Ω 저항에 연결하고, 저항의 다른 쪽 다리를 아두이노의 **디지털 핀 13번**에 연결합니다.</li>
+                    <li>LED의 **짧은 다리(-)**를 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_button_led_circuit.png" alt="아두이노 버튼으로 LED 켜고 끄기 회로도">
+            <p><i>(아두이노, 브레드보드, 버튼, LED, 저항이 연결된 정확한 회로도 이미지를 삽입해 주세요. 특히 풀다운 저항의 연결을 명확히 보여주세요.)</i></p>
+        </div>
+        <p class="note"><b>풀다운 저항의 중요성:</b>
+            버튼이 눌리지 않았을 때(회로가 끊어진 상태) 아두이노 핀의 전압이 불안정해지는 것을 막고, 항상 **LOW(0V) 상태**를 유지하도록 해주는 저항이에요. 이 저항이 없으면 버튼을 누르지 않았는데도 LED가 멋대로 켜지거나 꺼지는 현상(플로팅 상태)이 발생할 수 있어요.</p>
+
+        <h3>📝 3. 코딩하기: 버튼으로 LED 켜고 끄기</h3>
+        <p>이제 버튼을 누르면 LED가 켜지고, 버튼을 떼면 LED가 꺼지도록 코딩해 봅시다.</p>
+        <pre><code>// 아두이노 RC카 교실 - 1주차 2회차: 버튼으로 LED 켜고 끄기 예제
+
+// 1. 사용할 핀 번호들을 상수로 정의합니다.
+const int buttonPin = 2; // 버튼이 연결된 디지털 핀 번호
+const int ledPin = 13;   // LED가 연결된 디지털 핀 번호
+
+// 2. 버튼의 현재 상태를 저장할 변수를 선언합니다.
+//    초기값은 0 (LOW)으로 설정합니다.
+int buttonState = 0; 
+
+void setup() {
+  // setup() 함수: 아두이노가 시작될 때 한 번 실행됩니다.
+
+  // buttonPin (2번 핀)을 입력(INPUT) 모드로 설정합니다.
+  // 아두이노가 이 핀을 통해 버튼이 눌렸는지 아닌지 감지할 수 있게 합니다.
+  pinMode(buttonPin, INPUT);  
+  
+  // ledPin (13번 핀)을 출력(OUTPUT) 모드로 설정합니다.
+  pinMode(ledPin, OUTPUT);    
+
+  // 시리얼 통신을 시작합니다.
+  // 컴퓨터의 시리얼 모니터를 통해 아두이노가 보내는 메시지를 볼 수 있습니다.
+  Serial.begin(9600); // 통신 속도는 9600bps로 설정
+  Serial.println("버튼으로 LED 제어 준비 완료!");
+}
+
+void loop() {
+  // loop() 함수: setup() 이후 무한히 반복 실행됩니다.
+
+  // 1. buttonPin의 현재 디지털 상태를 읽어와 buttonState 변수에 저장합니다.
+  //    버튼이 눌리지 않으면 LOW(0), 눌리면 HIGH(1)가 됩니다.
+  buttonState = digitalRead(buttonPin); 
+
+  // 2. 현재 버튼 상태를 시리얼 모니터에 출력합니다. (디버깅용)
+  //    Serial.print()는 줄 바꿈 없이 출력, Serial.println()은 출력 후 줄 바꿈
+  Serial.print("버튼 상태: ");
+  Serial.println(buttonState); 
+
+  // 3. 조건문 (if-else 문)을 사용하여 버튼 상태에 따라 LED를 제어합니다.
+  if (buttonState == HIGH) { // 만약 buttonState가 HIGH와 같다면 (버튼이 눌렸다면)
+    digitalWrite(ledPin, HIGH); // LED를 웁니다.
+  } else { // 그렇지 않다면 (버튼이 눌리지 않았다면, buttonState가 LOW라면)
+    digitalWrite(ledPin, LOW);  // LED를 끕니다.
+  }
+
+  delay(10); // 너무 빠르게 반복되지 않도록 짧은 딜레이를 줍니다. (선택 사항)
+}
+```</pre>
+        <h4>새로운 코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight">`digitalRead(핀번호);`</span>: 디지털 핀의 현재 상태(전압)를 읽어오는 함수입니다. 핀에 **HIGH(5V)** 신호가 있으면 `HIGH`(또는 1)를 반환하고, **LOW(0V)** 신호가 있으면 `LOW`(또는 0)를 반환합니다.</li>
+            <li><span class="highlight">`Serial.begin(속도);`</span>: 아두이노와 컴퓨터 간에 **시리얼 통신**을 시작하는 함수입니다. `9600`은 통신 속도(bps: bits per second)를 의미하며, 양쪽(아두이노와 시리얼 모니터)이 동일하게 설정되어야 합니다.</li>
+            <li><span class="highlight">`Serial.print(값);`</span>, <span class="highlight">`Serial.println(값);`</span>: 아두이노가 컴퓨터의 **시리얼 모니터**로 텍스트나 변수 값을 전송하여 출력하는 함수입니다. `println`은 출력 후 자동으로 다음 줄로 넘어갑니다.</li>
+            <li><span class="highlight">`if (조건) { ... } else { ... }`</span>: **조건문**입니다. `if` 뒤의 괄호 안의 조건이 **참(true)**이면 `if` 블록 `{ ... }` 안의 코드를 실행하고, 조건이 **거짓(false)**이면 `else` 블록 `{ ... }` 안의 코드를 실행합니다.</li>
+        </ul>
+
+        <h3>✅ 4. 결과 확인</h3>
+        <ol>
+            <li>코드를 아두이노에 업로드합니다.</li>
+            <li>아두이노 IDE 상단의 돋보기 모양 아이콘을 클릭하여 **시리얼 모니터**를 엽니다. (오른쪽 아래 통신 속도가 9600으로 설정되어 있는지 확인하세요.)</li>
+            <li>버튼을 누르면 시리얼 모니터에 "버튼 상태: 1"이 뜨면서 LED가 켜지고, 버튼을 떼면 "버튼 상태: 0"이 뜨면서 LED가 꺼지는 것을 확인합니다.</li>
+        </ol>
+
+        <h3>💡 5. PWM: LED 밝기 조절하기</h3>
+        <p>지난 시간에 `digitalWrite()`는 LED를 켜거나 끄는 것(디지털 신호)만 가능했죠? 이번에는 LED의 밝기를 섬세하게 조절하는 방법을 배워볼 거예요. RC카의 라이트 밝기를 조절하거나 모터의 속도를 조절할 때 사용되는 중요한 기술이에요!</p>
+        <p>**PWM(Pulse Width Modulation, 펄스 폭 변조)**은 디지털 핀을 이용해 아날로그와 비슷한 효과를 내는 기술이에요. LED를 아주 빠르게 켰다 껐다를 반복하는데, 켜져 있는 시간의 비율을 조절해서 밝기를 다르게 보이게 하는 원리입니다. 이 비율을 **듀티 사이클(Duty Cycle)**이라고 불러요. 0(완전히 꺼짐)부터 255(완전히 켜짐)까지의 값으로 밝기를 조절할 수 있습니다.</p>
+        <div class="image-container">
+            <img src="pwm_explanation.png" alt="PWM 설명 다이어그램">
+            <p><i>(PWM의 원리, 즉 HIGH와 LOW의 비율에 따라 밝기가 달라지는 것을 시각적으로 설명하는 다이어그램을 삽입해 주세요.)</i></p>
+        </div>
+        <p class="note">**PWM 지원 핀**: 아두이노 우노 보드에서 디지털 핀 옆에 `~` (물결표) 표시가 있는 핀(예: 3, 5, 6, 9, 10, 11번 핀)만 PWM 기능을 사용할 수 있습니다. 우리는 13번 핀에 LED를 연결했지만, 13번 핀은 특별히 내부 LED가 연결되어 있어 PWM 테스트에 적합하지 않으니, **다른 PWM 지원 핀**에 LED를 다시 연결해 볼 거예요.</p>
+
+        <h3>🔌 6. 회로 연결하기: LED 밝기 조절 (PWM)</h3>
+        <p>준비물:</p>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>브레드보드</li>
+            <li>LED 1개</li>
+            <li>저항 1개 (220Ω 또는 330Ω)</li>
+            <li>**가변 저항(Potentiometer)** 1개</li>
+            <li>점퍼선 (수-수)</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <ol>
+            <li>**브레드보드 전원 연결**: (동일)
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**LED 연결**:
+                <ul>
+                    <li>LED의 **긴 다리(+)**를 저항에 연결하고, 저항의 다른 쪽 다리를 아두이노의 **디지털 핀 9번**에 연결합니다. (9번 핀은 PWM 지원 핀입니다.)</li>
+                    <li>LED의 **짧은 다리(-)**는 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**가변 저항 연결**:
+                <ul>
+                    <li>가변 저항의 세 다리 중 한쪽 끝 다리를 브레드보드의 **빨간색 (+) 라인(5V)**에 연결합니다.</li>
+                    <li>가변 저항의 다른 쪽 끝 다리를 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                    <li>가변 저항의 **가운데 다리**를 아두이노의 **아날로그 핀 A0번**에 연결합니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_pwm_circuit.png" alt="아두이노 PWM LED 밝기 조절 회로도">
+            <p><i>(아두이노, 브레드보드, 가변 저항, LED, 저항이 연결된 정확한 회로도 이미지를 삽입해 주세요.)</i></p>
+        </div>
+
+        <h3>📝 7. 코딩하기: 가변 저항으로 LED 밝기 조절</h3>
+        <p>가변 저항을 돌려 LED의 밝기가 변하도록 코딩해 봅시다.</p>
+        <pre><code>// 아두이노 RC카 교실 - 1주차 2회차 심화: 가변 저항으로 LED 밝기 조절 예제
+
+// 1. 사용할 핀 번호들을 상수로 정의합니다.
+const int potentiometerPin = A0; // 가변 저항이 연결된 아날로그 핀 번호
+const int ledPin = 9;            // LED가 연결된 디지털 PWM 지원 핀 번호 (예: 9번)
+
+void setup() {
+  // setup() 함수: 아두이노가 시작될 때 한 번 실행됩니다.
+
+  // potentiometerPin (A0번 핀)을 입력(INPUT) 모드로 설정합니다.
+  // 아두이노가 가변 저항의 아날로그 값을 읽을 수 있게 합니다.
+  pinMode(potentiometerPin, INPUT); 
+  
+  // ledPin (9번 핀)을 출력(OUTPUT) 모드로 설정합니다.
+  pinMode(ledPin, OUTPUT);    
+
+  // 시리얼 통신을 시작합니다. (가변 저항 값을 확인하기 위함)
+  Serial.begin(9600);
+  Serial.println("LED 밝기 조절 준비 완료!");
+}
+
+void loop() {
+  // loop() 함수: setup() 이후 무한히 반복 실행됩니다.
+
+  // 1. 가변 저항의 아날로그 값을 읽어와 변수에 저장합니다.
+  //    analogRead() 함수는 0부터 1023까지의 값을 반환합니다.
+  int sensorValue = analogRead(potentiometerPin); 
+
+  // 2. 시리얼 모니터에 읽어온 가변 저항 값을 출력합니다.
+  Serial.print("가변 저항 값: ");
+  Serial.println(sensorValue);
+
+  // 3. 읽어온 아날로그 값을 LED 밝기(PWM) 값으로 변환합니다.
+  //    map(값, 기존_최소값, 기존_최대값, 새_최소값, 새_최대값) 함수는 값을 변환해줍니다.
+  //    analogWrite()는 0부터 255까지의 값을 사용하므로, 0-1023을 0-255로 변환합니다.
+  int brightness = map(sensorValue, 0, 1023, 0, 255);
+
+  // 4. 변환된 밝기 값으로 LED를 제어합니다.
+  //    analogWrite() 함수는 PWM을 사용하여 핀의 밝기를 조절합니다.
+  analogWrite(ledPin, brightness);
+
+  delay(10); // 너무 빠르게 반복되지 않도록 짧은 딜레이를 줍니다.
+}
+```</pre>
+        <h4>새로운 코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight">`analogRead(핀번호);`</span>: 아날로그 핀의 전압 값을 읽어오는 함수입니다. 0V는 0, 5V는 1023으로 변환하여 **0부터 1023까지의 정수 값**을 반환합니다.</li>
+            <li><span class="highlight">`analogWrite(핀번호, 값);`</span>: PWM을 지원하는 디지털 핀에 **0부터 255까지의 아날로그 값**을 출력하는 함수입니다. 이 값에 따라 핀의 듀티 사이클이 달라져 LED의 밝기나 모터의 속도를 조절할 수 있습니다.</li>
+            <li><span class="highlight">`map(값, fromLow, fromHigh, toLow, toHigh);`</span>: 어떤 범위의 값을 다른 범위의 값으로 **비율에 맞춰 변환**해주는 함수입니다. 예를 들어, `map(sensorValue, 0, 1023, 0, 255)`는 `sensorValue` (0~1023 범위)를 `0~255` 범위로 바꿔줍니다.</li>
+        </ul>
+
+        <h3>✅ 8. 결과 확인</h3>
+        <ol>
+            <li>코드를 아두이노에 업로드합니다.</li>
+            <li>시리얼 모니터를 열어서 가변 저항 값이 0부터 1023까지 변하는지 확인합니다.</li>
+            <li>가변 저항의 손잡이를 돌려보면서 LED의 밝기가 서서히 변하는 것을 확인합니다.</li>
+        </ol>
+
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>`map()` 함수의 마지막 두 값(예: `0, 255`)을 바꿔서 LED의 최대/최소 밝기를 다르게 해보세요. (예: `0, 100`으로 하면 최대 밝기가 줄어듭니다.)</li>
+                <li>`analogRead()` 대신 버튼이나 다른 센서(예: 조도 센서)를 이용해서 LED의 밝기를 조절해 보세요.</li>
+                <li>`digitalWrite()`와 `analogWrite()`를 함께 사용해서, 버튼을 누르면 LED가 켜지고, 가변 저항으로 밝기를 조절할 수 있게 만들어 보세요. (버튼이 눌려있을 때만 밝기 조절 가능)</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2>❓ 궁금증 해결 시간</h2>
+        <p>오늘 아두이노 개발 환경 설정, LED 제어, 버튼 입력, PWM을 이용한 밝기 조절까지 많은 것을 배웠어요. 혹시 이해가 잘 안 되거나 더 궁금한 점이 있나요? 무엇이든 질문해주세요!</p>
+
+        <hr>
+
+        <p>축하합니다! 아두이노 RC카 만들기 프로젝트의 첫 주를 성공적으로 마쳤어요. 다음 시간에는 RC카의 '움직임'을 만드는 핵심 부품인 모터를 제어하는 방법에 대해 자세히 알아볼 거예요. 오늘 배운 기본 개념들을 잘 기억하고, 스스로 해보기 미션도 꼭 도전해 보세요!</p>
+    </div>
+</body>
+</html>

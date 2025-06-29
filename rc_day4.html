@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노 RC카 교실 4주차 교재: RC카에 '감각' 더하기 (센서 활용)</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+        h4 {
+            color: #1a5276;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #eaf6ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            border: 1px solid #c0d8e8;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 5px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .image-container img {
+            max-width: 90%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .caution {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노 RC카 교실 4주차 교재: RC카에 '감각' 더하기 (센서 활용)</h1>
+
+        <hr>
+
+        <h2>💡 이번 주 학습 목표</h2>
+        <ul>
+            <li>RC카의 '눈' 역할을 하는 **초음파 센서**의 원리를 이해하고, 거리를 측정하는 방법을 배워요.</li>
+            <li>RC카의 '청각' 또는 '충격 감지' 역할을 하는 **진동 센서**의 원리를 이해하고, 진동을 감지하는 방법을 배워요.</li>
+            <li>측정된 센서 값을 이용하여 RC카가 주변 환경에 반응하는 **자율 주행의 기초**를 경험해요.</li>
+            <li>다양한 센서들을 아두이노에 연결하고 데이터를 읽어오는 방법을 익혀요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>1회차: RC카의 눈, 초음파 센서로 거리 측정하기</h2>
+
+        <h3>👀 1. 초음파 센서란 무엇일까요?</h3>
+        <p>**초음파 센서(Ultrasonic Sensor)**는 사람의 귀에는 들리지 않는 높은 주파수의 소리(초음파)를 이용해서 물체까지의 거리를 측정하는 센서예요. 마치 박쥐나 돌고래가 초음파를 이용해 주변을 파악하는 것과 같아요. RC카에 이 센서를 달면 앞에 장애물이 있는지 없는지, 있다면 얼마나 떨어져 있는지 알 수 있게 됩니다. 이는 RC카가 벽에 부딪히지 않고 스스로 길을 찾아가는 **자율 주행**의 가장 기본적인 핵심 기술이에요.</p>
+        <p>가장 흔히 사용되는 초음파 센서는 **HC-SR04** 모듈이에요.</p>
+        <div class="image-container">
+            <img src="hc_sr04_ultrasonic_sensor.png" alt="HC-SR04 초음파 센서 이미지">
+            <p><i>(HC-SR04 초음파 센서의 실제 사진 또는 핀 명칭이 표시된 다이어그램을 삽입해 주세요. Trig, Echo, VCC, GND 핀이 표시되면 좋습니다.)</i></p>
+        </div>
+
+        <h4>초음파 센서 (HC-SR04)의 작동 원리:</h4>
+        <ol>
+            <li>**Trig (Trigger) 핀**: 아두이노에서 짧은 초음파를 발생시키라는 명령을 보내는 핀입니다.</li>
+            <li>**Echo (Echo Receive) 핀**: 초음파 센서에서 보낸 초음파가 물체에 부딪혀 되돌아오는 것을 감지하는 핀입니다.</li>
+            <li>**VCC**: 전원 공급 (5V).</li>
+            <li>**GND**: 접지.</li>
+        </ol>
+        <p>초음파 센서는 Trig 핀으로 초음파를 발생시킨 후, Echo 핀으로 되돌아오는 초음파를 감지할 때까지의 **시간**을 측정해요. 소리의 속도는 일정하므로, 이 시간을 이용해 물체까지의 거리를 계산할 수 있습니다.</p>
+        <p><code>거리 = (초음파가 나갔다가 돌아오는 시간 × 소리의 속도) / 2</code></p>
+        <p><strong>소리의 속도</strong>는 약 340m/s (0.034cm/μs) 이므로, 마이크로초(μs) 단위로 시간을 측정하면:
+        <code>거리 (cm) = (시간 (μs) × 0.034) / 2</code></p>
+
+        <h3>🔌 2. 회로 연결하기: 초음파 센서와 아두이노 연결</h3>
+        <p>HC-SR04 초음파 센서는 아두이노의 디지털 핀 두 개(Trig, Echo)를 사용하여 제어하고 데이터를 읽어와요.</p>
+        <h4>준비물:</h4>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>브레드보드</li>
+            <li>HC-SR04 초음파 센서 모듈 1개</li>
+            <li>점퍼선 (수-수)</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <ol>
+            <li>**브레드보드 전원 연결**:
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**초음파 센서 연결**:
+                <ul>
+                    <li>HC-SR04 센서의 **VCC 핀**을 브레드보드의 **빨간색 (+) 라인(5V)**에 연결합니다.</li>
+                    <li>HC-SR04 센서의 **GND 핀**을 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                    <li>HC-SR04 센서의 **Trig 핀**을 아두이노의 **디지털 핀 11번**에 연결합니다.</li>
+                    <li>HC-SR04 센서의 **Echo 핀**을 아두이노의 **디지털 핀 12번**에 연결합니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_ultrasonic_circuit.png" alt="아두이노 초음파 센서 HC-SR04 연결 회로도">
+            <p><i>(아두이노, 브레드보드, HC-SR04 초음파 센서가 연결된 정확한 회로도 이미지를 삽입해 주세요. 각 핀의 연결을 명확히 보여주세요.)</i></p>
+        </div>
+        <p class="caution"><b>주의!</b> 초음파 센서는 전원과 GND 핀을 반대로 연결하면 손상될 수 있으니 반드시 극성을 확인하세요.</p>
+
+        <h3>📝 3. 코딩하기: 초음파 센서로 거리 측정</h3>
+        <p>아두이노의 <code>pulseIn()</code> 함수를 사용하여 Echo 핀으로 신호가 돌아오는 시간을 측정하고, 이를 이용해 거리를 계산할 수 있어요.</p>
+        <pre><code class="language-cpp">// 아두이노 RC카 교실 - 4주차 1회차: 초음파 센서로 거리 측정 예제
+
+const int trigPin = 11; // 초음파 발생(Trigger) 핀
+const int echoPin = 12; // 초음파 수신(Echo) 핀
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("초음파 센서 거리 측정 시작!");
+
+  pinMode(trigPin, OUTPUT); // Trig 핀을 출력 모드로 설정
+  pinMode(echoPin, INPUT);  // Echo 핀을 입력 모드로 설정
+}
+
+void loop() {
+  // 1. Trig 핀을 LOW로 2마이크로초 유지 (안정화)
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2); 
+
+  // 2. Trig 핀을 HIGH로 10마이크로초 유지 (초음파 발생)
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  
+  // 3. Trig 핀을 다시 LOW로 (초음파 발생 완료)
+  digitalWrite(trigPin, LOW);
+
+  // 4. Echo 핀이 HIGH로 유지되는 시간을 측정 (초음파가 돌아오는 시간)
+  //    pulseIn(핀번호, 상태) 함수는 해당 핀이 지정된 상태가 될 때까지의 시간을 마이크로초 단위로 반환
+  long duration = pulseIn(echoPin, HIGH);
+
+  // 5. 시간을 이용하여 거리 계산 (cm 단위)
+  //    소리의 속도: 약 340m/s = 0.034 cm/μs
+  //    거리는 왕복 거리의 절반이므로 / 2
+  float distanceCm = duration * 0.034 / 2;
+
+  // 6. 시리얼 모니터에 거리 출력
+  Serial.print("거리: ");
+  Serial.print(distanceCm);
+  Serial.println(" cm");
+
+  delay(500); // 0.5초마다 거리 측정 및 출력
+}
+</code></pre>
+        <h4>코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight"><code>delayMicroseconds(마이크로초);</code></span>: <code>delay()</code> 함수와 비슷하지만, **마이크로초(μs, 1/1,000,000초)** 단위로 아주 짧은 시간 동안 프로그램을 멈추는 함수예요. 초음파 센서 제어에 필수적입니다.</li>
+            <li><span class="highlight"><code>long duration = pulseIn(echoPin, HIGH);</code></span>: <code>pulseIn()</code> 함수는 특정 핀의 상태(예: HIGH)가 유지되는 시간을 마이크로초 단위로 측정하여 반환해요. 여기서는 Echo 핀이 HIGH로 변했다가 다시 LOW로 돌아올 때까지의 시간을 측정합니다. 이 시간이 초음파가 물체에 부딪혀 돌아오는 왕복 시간이에요.</li>
+            <li><code>float distanceCm = duration * 0.034 / 2;</code>: 측정된 시간(<code>duration</code>)을 이용하여 거리를 계산하는 공식입니다. <code>0.034</code>는 1마이크로초 동안 소리가 이동하는 거리(cm)이며, 왕복 거리이므로 2로 나눕니다. <code>float</code>은 소수점이 있는 숫자를 저장하는 변수 타입입니다.</li>
+        </ul>
+
+        <h3>✅ 4. 결과 확인</h3>
+        <ol>
+            <li>코드를 아두이노에 업로드합니다.</li>
+            <li>시리얼 모니터를 엽니다.</li>
+            <li>초음파 센서 앞에 손을 가까이 대거나 멀리 떨어뜨려 보면서 시리얼 모니터에 출력되는 거리가 어떻게 변하는지 확인합니다. 정확하게 거리를 측정하는지 테스트해 보세요.</li>
+        </ol>
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>초음파 센서로 측정한 거리가 20cm 이하로 가까워지면 RC카가 멈추도록 코드를 수정해 보세요. (3주차의 <code>stopMotors()</code> 함수 활용!)</li>
+                <li>거리에 따라 LED의 색깔을 바꾸거나, 부저에서 다른 소리가 나도록 만들어 보세요. (예: 50cm 이상 - 초록 LED, 20~50cm - 노랑 LED, 20cm 이하 - 빨강 LED + 경고음)</li>
+                <li>RC카에 초음파 센서를 장착하고, 실제로 벽이나 장애물에 부딪히지 않고 멈추는지를 테스트해 보세요.</li>
+            </ul>
+        </div>
+
+        <hr>
+        <br>
+
+        <h2>2회차: RC카의 청각, 진동 센서로 충격 감지하기</h2>
+
+        <h3>🔊 1. 진동 센서란 무엇일까요?</h3>
+        <p>**진동 센서(Vibration Sensor)**는 외부의 물리적인 충격이나 진동을 감지하는 센서예요. RC카가 다른 물체에 부딪혔을 때 발생하는 충격을 감지하거나, 특정 진동을 인식해야 할 때 사용할 수 있어요. 예를 들어, RC카가 넘어졌을 때 알림음을 내거나, 심한 충격을 받으면 자동으로 멈추는 기능을 만들 수 있죠.</p>
+        <p>진동 센서는 보통 내부에 작은 스프링이나 금속 볼이 들어있어, 흔들리거나 충격을 받으면 내부 회로가 연결(닫힘)되거나 끊어지는(열림) 방식으로 작동합니다. 즉, **디지털 신호**를 내보내는 센서예요 (HIGH 또는 LOW).</p>
+        <div class="image-container">
+            <img src="vibration_sensor.png" alt="진동 센서 이미지">
+            <p><i>(진동 센서의 실제 사진 또는 핀 명칭이 표시된 다이어그램을 삽입해 주세요. 전원, GND, 신호선이 표시되면 좋습니다.)</i></p>
+        </div>
+
+        <h3>🔌 2. 회로 연결하기: 진동 센서와 아두이노 연결</h3>
+        <p>진동 센서는 기본적으로 디지털 입력 센서이므로, 버튼처럼 풀업 또는 풀다운 저항을 사용하여 안정적인 값을 읽어야 해요. 여기서는 내장된 풀업 저항을 사용하는 방법을 알려드릴게요.</p>
+        <h4>준비물:</h4>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>브레드보드</li>
+            <li>진동 센서 모듈 1개 (2핀 또는 3핀 타입)</li>
+            <li>저항 1개 (10kΩ, 2핀 타입 진동 센서만 필요)</li>
+            <li>점퍼선 (수-수)</li>
+        </ul>
+        <h4>회로 연결 순서:</h4>
+        <p><strong>[옵션 1: 3핀 진동 센서 모듈 사용 시 (가장 일반적이고 쉬움)]</strong></p>
+        <ol>
+            <li>**브레드보드 전원 연결**:
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**진동 센서 연결**:
+                <ul>
+                    <li>진동 센서 모듈의 **VCC 핀**을 브레드보드의 **빨간색 (+) 라인(5V)**에 연결합니다.</li>
+                    <li>진동 센서 모듈의 **GND 핀**을 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                    <li>진동 센서 모듈의 **SIG (또는 DO) 핀**을 아두이노의 **디지털 핀 2번**에 연결합니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><strong>[옵션 2: 2핀 진동 센서 사용 시 (스프링 타입 등)]</strong></p>
+        <ol>
+            <li>**브레드보드 전원 연결**:
+                <ul>
+                    <li>아두이노의 **GND 핀**에서 브레드보드의 **파란색 (-) 라인**에 연결합니다.</li>
+                    <li>아두이노의 **5V 핀**에서 브레드보드의 **빨간색 (+) 라인**에 연결합니다.</li>
+                </ul>
+            </li>
+            <li>**진동 센서 연결**:
+                <ul>
+                    <li>진동 센서의 한쪽 다리를 아두이노의 **디지털 핀 2번**에 연결합니다.</li>
+                    <li>진동 센서의 다른 쪽 다리를 브레드보드의 **파란색 (-) 라인(GND)**에 연결합니다.</li>
+                    <li>디지털 핀 2번과 연결된 다리에서 **10kΩ 저항**을 연결하여 브레드보드의 **빨간색 (+) 라인(5V)**에 연결합니다. (**풀업 저항** 역할)</li>
+                    <li>(또는, 코드로 내장 풀업 저항 사용 시 10kΩ 저항 연결 불필요 - 아래 코드 참고)</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="arduino_vibration_sensor_circuit.png" alt="아두이노 진동 센서 연결 회로도">
+            <p><i>(3핀 진동 센서 모듈 또는 2핀 진동 센서와 10kΩ 풀업 저항이 연결된 정확한 회로도 이미지를 삽입해 주세요.)</i></p>
+        </div>
+        <p class="caution"><b>주의!</b> 2핀 진동 센서 사용 시 풀업(Pull-up) 저항이 없으면 핀의 상태가 불안정해져 오작동할 수 있습니다. 아두이노 내장 풀업 저항을 사용하는 것이 편리해요.</p>
+
+        <h3>📝 3. 코딩하기: 진동 감지 및 LED 알림</h3>
+        <p>진동 센서의 디지털 값을 읽어와 충격이 감지되었을 때 LED를 켜거나 시리얼 모니터에 메시지를 출력해 봅시다. 여기서는 아두이노의 **내장 풀업 저항**을 사용해 핀의 안정성을 확보하는 코드를 사용할 거예요.</p>
+        <pre><code class="language-cpp">// 아두이노 RC카 교실 - 4주차 2회차: 진동 감지 및 LED 알림 예제
+
+const int vibrationSensorPin = 2; // 진동 센서 신호선이 연결된 디지털 핀 번호
+const int ledPin = 13;            // 알림용 LED 핀 (아두이노 내장 LED도 사용 가능)
+
+// 진동 감지 상태를 저장할 변수
+int vibrationState = 0; 
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("진동 센서 감지 시작!");
+
+  // 진동 센서 핀을 입력 모드로 설정하고, 내장 풀업 저항을 활성화합니다.
+  // 이렇게 하면 별도의 풀업 저항 없이 핀의 상태를 안정적으로 읽을 수 있습니다.
+  pinMode(vibrationSensorPin, INPUT_PULLUP); 
+  
+  // LED 핀을 출력 모드로 설정
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  // 진동 센서의 상태를 읽어옵니다.
+  // INPUT_PULLUP 사용 시, 평소에는 HIGH (스프링 연결X), 충격 시 LOW (스프링 연결O)
+  vibrationState = digitalRead(vibrationSensorPin); 
+
+  // 진동이 감지되었는지 확인 (LOW가 감지된 상태)
+  if (vibrationState == LOW) { 
+    Serial.println("!!! 진동 감지됨 !!!");
+    digitalWrite(ledPin, HIGH); // LED 켜기
+    delay(500); // 0.5초 동안 LED 켜고 대기 (중복 감지 방지)
+  } else {
+    digitalWrite(ledPin, LOW); // LED 끄기
+  }
+
+  // 짧은 딜레이로 안정화
+  delay(10); 
+}
+</code></pre>
+        <h4>코딩 용어 상세 설명:</h4>
+        <ul>
+            <li><span class="highlight"><code>pinMode(vibrationSensorPin, INPUT_PULLUP);</code></span>: <code>INPUT_PULLUP</code> 모드를 사용하면 아두이노 내부에 있는 작은 풀업 저항을 활성화하여, 외부 저항 없이도 핀의 상태를 안정적으로 읽을 수 있어요. 이 모드에서는 핀에 아무것도 연결되지 않거나 회로가 끊어져 있을 때 <code>HIGH</code> 값을 읽고, 접지(<code>GND</code>)에 연결되면 <code>LOW</code> 값을 읽습니다. (일반적인 버튼 연결 시 <code>HIGH</code>를 <code>LOW</code>로 바꾸는 것과 반대 개념이에요. 충격 시 <code>LOW</code>가 됩니다.)</li>
+            <li><code>if (vibrationState == LOW) { ... }</code>: 진동 센서가 충격을 받아 회로가 연결되었을 때(<code>LOW</code> 신호)만 특정 동작을 수행하도록 조건문을 사용했어요.</li>
+        </ul>
+
+        <h3>✅ 4. 결과 확인</h3>
+        <ol>
+            <li>코드를 아두이노에 업로드합니다.</li>
+            <li>진동 센서를 손으로 톡톡 쳐보거나 흔들어 보면서 시리얼 모니터에 "!!! 진동 감지됨 !!!" 메시지가 뜨고 LED가 켜지는지 확인합니다.</li>
+        </ol>
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>진동이 감지되면 RC카가 잠시 멈추고 경고음을 내도록 만들어 보세요. (3주차 <code>stopMotors()</code> 함수와 2주차 <code>tone()</code> 함수 활용!)</li>
+                <li>연속적으로 진동이 감지될 때만 RC카를 정지시키는 로직을 추가해 보세요. (오작동 방지)</li>
+                <li>RC카에 진동 센서를 부착하여 실제 주행 중 충돌 시 작동하는지 테스트해 보세요.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2>❓ 궁금증 해결 시간</h2>
+        <p>오늘 RC카에 '눈'과 '귀'를 달아주는 초음파 센서와 진동 센서를 다루어 봤어요. 이 센서들을 활용하면 RC카가 주변 환경을 인식하고 스스로 판단하여 움직이는 **스마트 RC카**의 기반을 만들 수 있답니다. 혹시 이해가 잘 안 되거나 더 궁금한 점이 있나요? 무엇이든 질문해주세요!</p>
+
+        <hr>
+
+        <p>축하합니다! 아두이노 RC카 만들기 프로젝트의 네 번째 주도 성공적으로 마쳤어요. 이제 RC카가 기본적인 이동과 방향 조절을 넘어, 주변 환경을 감지하고 반응하는 능력을 갖추게 되었답니다. 다음 시간에는 RC카를 무선으로 조종하는 방법에 대해 알아볼 거예요. 오늘 배운 센서 활용 개념들을 잘 기억하고, 스스로 해보기 미션도 꼭 도전해 보세요!</p>
+    </div>
+</body>
+</html>

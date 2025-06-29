@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노 RC카 교실 7주차 교재: RC카 프로젝트 심화 및 확장</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+        h4 {
+            color: #1a5276;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #eaf6ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            border: 1px solid #c0d8e8;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 5px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .image-container img {
+            max-width: 90%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .caution {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노 RC카 교실 7주차 교재: RC카 프로젝트 심화 및 확장</h1>
+
+        <hr>
+
+        <h2>💡 이번 주 학습 목표</h2>
+        <ul>
+            <li>지금까지 배운 RC카 제어, 블루투스 통신, 초음파 센서 활용, 장애물 회피 등의 지식을 통합하고 복습해요.</li>
+            <li>RC카 프로젝트를 더 다양하고 재미있게 확장할 수 있는 아이디어들을 탐색해요.</li>
+            <li>새로운 센서(예: 라인 트레이서 센서)나 모듈(예: LCD)을 RC카에 적용하는 방법을 간략히 알아봐요.</li>
+            <li>나만의 RC카를 위한 추가 기능 구현을 위한 아이디어를 구상하고, 다음 단계로 나아갈 방향을 설정해요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>1회차: RC카 기능 통합 및 복습</h2>
+
+        <h3>🔍 1. 지금까지 배운 내용 되짚어보기</h3>
+        <p>지난 6주 동안 우리는 아두이노 RC카를 만들기 위한 다양한 기술들을 익혔어요. 각 주차별로 배운 핵심 내용을 다시 한번 정리해 볼까요?</p>
+        <ul>
+            <li><b>1주차:</b> 아두이노와 브레드보드 기초, LED 제어</li>
+            <li><b>2주차:</b> DC 모터와 모터 드라이버(L298N)로 RC카 움직이기</li>
+            <li><b>3주차:</b> 블루투스 모듈(HC-06/05)로 스마트폰에서 RC카 무선 제어</li>
+            <li><b>4주차:</b> 초음파 센서(HC-SR04)로 거리 측정</li>
+            <li><b>5주차:</b> 스마트폰 앱(MIT App Inventor)으로 RC카 제어 앱 만들기</li>
+            <li><b>6주차:</b> 서보 모터와 초음파 센서를 활용한 장애물 회피 자율 주행</li>
+        </ul>
+        <p>이 모든 지식들이 합쳐져서 여러분의 RC카가 스마트폰으로 제어되고, 스스로 장애물을 피하는 똑똑한 로봇이 될 수 있었답니다!</p>
+
+        <h3>⚙️ 2. 전체 코드 통합 및 최적화</h3>
+        <p>지금까지 각 기능별로 코드를 작성했지만, 실제 RC카를 동작시키려면 이 모든 기능이 하나의 코드 안에서 유기적으로 작동해야 해요. 6주차에 작성했던 장애물 회피 자율 주행 코드에 블루투스 제어 기능을 추가하여, 평소에는 자율 주행을 하다가 사용자가 스마트폰으로 명령하면 수동 제어로 전환되는 RC카를 상상해 볼 수 있어요.</p>
+
+        <h4>통합 코드의 핵심 아이디어:</h4>
+        <ul>
+            <li>블루투스에서 명령이 들어오지 않으면 (또는 특정 모드일 때) 6주차의 장애물 회피 자율 주행 코드를 실행합니다.</li>
+            <li>블루투스에서 '전진', '후진', '좌회전', '우회전', '정지' 등의 명령이 들어오면 해당 명령을 우선적으로 처리하고, 자율 주행 모드를 잠시 멈춥니다.</li>
+            <li>'자율 주행 모드' 전환 버튼을 앱에 추가하여, 사용자가 원할 때 자율 주행 모드로 진입하거나 수동 제어 모드로 전환할 수 있도록 합니다.</li>
+        </ul>
+
+        <p class="note"><b>참고:</b> 모든 기능을 하나의 코드에 통합하는 것은 코드가 길어지고 복잡해질 수 있습니다. 함수를 잘게 나누고, 주석을 충분히 달아 코드를 이해하기 쉽게 만드는 것이 중요합니다.</p>
+
+        <h3>📝 3. 통합 코드 예시 (개념 설명)</h3>
+        <p>아래는 블루투스 제어와 장애물 회피 기능을 통합하는 코드의 <b>개념적인 구조</b>입니다. 실제 구현 시에는 각 기능별 함수들을 세밀하게 조정해야 합니다.</p>
+        <pre><code class="language-cpp">// 아두이노 RC카 교실 - 7주차 1회차: 기능 통합 예시 (개념 코드)
+
+#include &lt;Servo.h&gt;
+#include &lt;SoftwareSerial.h&gt; // 블루투스 통신용 (3주차)
+
+// ======= 핀 설정 (6주차 2회차와 동일) =======
+// 모터 드라이버 핀
+const int motor1_IN1 = 7; 
+const int motor1_IN2 = 6;
+const int motor1_ENA = 9;  // PWM 핀
+
+const int motor2_IN3 = 5;
+const int motor2_IN4 = 4;
+const int motor2_ENB = 10; // PWM 핀
+
+int motorSpeed = 150; // RC카 주행 속도 (0~255)
+
+// 초음파 센서 핀
+const int trigPin = 11; 
+const int echoPin = 12;
+
+// 서보 모터 핀
+Servo myServo;
+const int servoPin = 8; 
+
+// 블루투스 모듈 핀 (RX, TX)
+SoftwareSerial BTSerial(2, 3); // RX, TX (아두이노 2번핀 -> BT TX, 아두이노 3번핀 -> BT RX)
+
+// ======= 장애물 감지 임계값 설정 =======
+const int OBSTACLE_DISTANCE_CM = 25; 
+
+// ======= RC카 모드 설정 =======
+enum CarMode { MANUAL_MODE, AUTO_MODE };
+CarMode currentMode = MANUAL_MODE; // 초기 모드는 수동 제어
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("RC카 통합 제어 시작!");
+  BTSerial.begin(9600); // 블루투스 통신 시작
+
+  // 모터 핀 설정
+  pinMode(motor1_IN1, OUTPUT);
+  pinMode(motor1_IN2, OUTPUT);
+  pinMode(motor1_ENA, OUTPUT);
+  pinMode(motor2_IN3, OUTPUT);
+  pinMode(motor2_IN4, OUTPUT);
+  pinMode(motor2_ENB, OUTPUT);
+  stopMotors(); 
+
+  // 초음파 센서 핀 모드 설정
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  // 서보 모터 연결 및 초기 위치 설정
+  myServo.attach(servoPin);
+  myServo.write(90); 
+  delay(1000); 
+}
+
+void loop() {
+  // 블루투스 데이터 수신 확인
+  if (BTSerial.available()) {
+    char command = BTSerial.read();
+    Serial.print("블루투스 명령 수신: ");
+    Serial.println(command);
+
+    // 모드 전환 명령 처리
+    if (command == 'A') { // 'A'를 받으면 자율 주행 모드
+      currentMode = AUTO_MODE;
+      Serial.println("모드 전환: 자율 주행 모드");
+    } else if (command == 'M') { // 'M'을 받으면 수동 제어 모드
+      currentMode = MANUAL_MODE;
+      Serial.println("모드 전환: 수동 제어 모드");
+      stopMotors(); // 모드 전환 시 정지
+    }
+    // 수동 제어 명령 처리 (3주차 코드 활용)
+    if (currentMode == MANUAL_MODE) {
+      handleManualControl(command);
+    }
+  }
+
+  // 현재 모드에 따른 동작 실행
+  if (currentMode == AUTO_MODE) {
+    handleAutonomousDriving(); // 6주차 장애물 회피 로직
+  }
+  // MANUAL_MODE일 때는 블루투스 명령에 따라 움직이므로 별도 로직 없음
+}
+
+// 수동 제어 명령 처리 함수 (3주차 코드)
+void handleManualControl(char cmd) {
+  switch (cmd) {
+    case 'F': moveForward(); Serial.println("전진"); break;
+    case 'B': moveBackward(); Serial.println("후진"); break;
+    case 'L': turnLeft(); Serial.println("좌회전"); break;
+    case 'R': turnRight(); Serial.println("우회전"); break;
+    case 'S': stopMotors(); Serial.println("정지"); break;
+    // 다른 명령 추가 가능
+  }
+}
+
+// 자율 주행 로직 함수 (6주차 2회차 코드)
+void handleAutonomousDriving() {
+  int distanceForward = measureDistance(); 
+
+  if (distanceForward <= OBSTACLE_DISTANCE_CM) {
+    stopMotors(); 
+    delay(500); 
+
+    int distanceLeft = lookLeft();
+    delay(100); 
+    int distanceRight = lookRight();
+    delay(100); 
+    
+    myServo.write(90); 
+    delay(300);
+
+    if (distanceLeft > distanceRight) {
+      turnLeft(); 
+      delay(800); 
+      stopMotors();
+    } else if (distanceRight > distanceLeft) {
+      turnRight(); 
+      delay(800); 
+      stopMotors();
+    } else { 
+      turnRight(); 
+      delay(800);
+      stopMotors();
+    }
+    moveForward(); 
+    delay(500); 
+  } else {
+    moveForward();
+  }
+}
+
+// 나머지 함수들은 6주차 2회차 코드와 동일하게 복사하여 붙여넣기
+// measureDistance(), lookLeft(), lookRight(), moveForward(), moveBackward(), stopMotors(), turnLeft(), turnRight()
+// ... (이 부분에 해당 함수들 삽입)
+float measureDistance() { /* ... */ return 0; } // 실제 코드 삽입
+int lookLeft() { /* ... */ return 0; } // 실제 코드 삽입
+int lookRight() { /* ... */ return 0; } // 실제 코드 삽입
+void moveForward() { /* ... */ } // 실제 코드 삽입
+void moveBackward() { /* ... */ } // 실제 코드 삽입
+void stopMotors() { /* ... */ } // 실제 코드 삽입
+void turnLeft() { /* ... */ } // 실제 코드 삽입
+void turnRight() { /* ... */ } // 실제 코드 삽입
+</code></pre>
+
+        <h3>✅ 4. 통합 RC카 테스트</h3>
+        <p>통합된 코드를 아두이노에 업로드하고, 스마트폰 앱을 통해 테스트해 보세요.</p>
+        <ol>
+            <li>앱에서 '자율 주행 모드'로 전환하는 버튼을 누르면 RC카가 스스로 장애물을 피해 움직이는지 확인합니다.</li>
+            <li>다시 '수동 제어 모드'로 전환하는 버튼을 누르거나, 방향 제어 버튼을 누르면 RC카가 사용자의 명령에 따라 움직이는지 확인합니다.</li>
+            <li>두 모드 간 전환이 원활하게 이루어지는지, 각 모드에서 의도한 대로 동작하는지 세심하게 관찰합니다.</li>
+        </ol>
+        <p class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>스마트폰 앱에 '자율 주행 모드'와 '수동 제어 모드'를 전환하는 버튼을 추가해 보세요.</li>
+                <li>RC카가 모드를 전환할 때 시리얼 모니터에 어떤 메시지가 출력되는지 확인해 보세요.</li>
+                <li>자율 주행 중 수동 제어 명령이 들어왔을 때, 자율 주행 로직이 즉시 중단되는지 확인해 보세요.</li>
+            </ul>
+        </p>
+
+        <hr>
+        <br>
+
+        <h2>2회차: RC카 프로젝트 확장 아이디어 및 심화 학습</h2>
+
+        <h3>💡 1. RC카에 추가할 수 있는 센서 및 모듈</h3>
+        <p>지금까지 배운 센서 외에도 아두이노는 다양한 센서와 모듈을 활용하여 RC카의 기능을 확장할 수 있어요. 몇 가지 아이디어를 살펴볼까요?</p>
+        <ul>
+            <li><b>라인 트레이서 센서 (적외선 센서):</b> 바닥의 검은 선을 따라가는 RC카를 만들 수 있어요. 자율 주행의 또 다른 형태입니다.</li>
+            <li><b>조도 센서 (CDS 센서):</b> 주변 밝기를 감지하여 어두워지면 RC카의 헤드라이트를 자동으로 켜거나 끌 수 있어요.</li>
+            <li><b>온습도 센서 (DHT11/22):</b> RC카가 주행하는 공간의 온도와 습도를 측정하여 앱으로 전송할 수 있어요.</li>
+            <li><b>LCD 모듈:</b> RC카 자체에 작은 화면을 달아 현재 속도, 거리, 모드 등의 정보를 표시할 수 있어요.</li>
+            <li><b>GPS 모듈:</b> RC카의 현재 위치를 파악하여 지도에 표시하거나 특정 위치로 이동하는 기능을 구현할 수 있어요. (단, GPS는 실외에서만 작동하고 복잡도가 높습니다.)</li>
+            <li><b>카메라 모듈:</b> RC카의 시야를 스마트폰으로 실시간 전송하거나, 이미지 처리를 통해 장애물을 더 정확하게 인식할 수 있어요. (아두이노 우노로는 어려우며, ESP32-CAM 같은 고성능 보드가 필요합니다.)</li>
+        </ul>
+        <div class="image-container">
+            <img src="various_arduino_sensors.png" alt="다양한 아두이노 센서 모듈 이미지">
+            <p><i>(라인 트레이서 센서, 조도 센서, LCD 모듈 등 다양한 아두이노 센서 및 모듈의 이미지를 콜라주 형태로 삽입해 주세요.)</i></p>
+        </div>
+
+        <h3>🛠️ 2. 라인 트레이서 RC카 아이디어</h3>
+        <p>라인 트레이서는 바닥에 그려진 선을 따라가는 로봇을 만드는 대표적인 예제입니다. 적외선 센서 여러 개를 RC카 바닥에 부착하여, 검은 선과 흰 바닥의 반사율 차이를 감지하여 선을 따라가도록 제어합니다.</p>
+        <h4>라인 트레이서 알고리즘의 기본:</h4>
+        <ol>
+            <li>RC카 바닥에 2개 이상의 적외선 센서를 부착합니다. (예: 왼쪽, 중앙, 오른쪽)</li>
+            <li>중앙 센서가 선 위에 있으면 직진합니다.</li>
+            <li>왼쪽 센서가 선 위에 있으면 오른쪽으로 살짝 회전하여 선을 다시 찾습니다.</li>
+            <li>오른쪽 센서가 선 위에 있으면 왼쪽으로 살짝 회전하여 선을 다시 찾습니다.</li>
+            <li>모든 센서가 선을 벗어나면 정지하거나, 마지막으로 감지된 방향으로 회전하여 선을 다시 찾습니다.</li>
+        </ol>
+        <p class="note"><b>참고:</b> 라인 트레이서 센서는 보통 흑백 대비가 명확한 선에서 가장 잘 작동합니다. 센서의 개수가 많을수록 더 정교한 라인 트레이싱이 가능합니다.</p>
+
+        <h3>💡 3. 나만의 RC카 프로젝트 아이디어 구상</h3>
+        <p>이제 여러분은 RC카를 만들고 제어하는 데 필요한 기본적인 지식과 기술을 모두 갖췄어요. 이 지식을 바탕으로 나만의 RC카를 더욱 특별하게 만들 아이디어를 구상해 볼 시간입니다!</p>
+        <ul>
+            <li><b>배달 RC카:</b> 작은 물건을 싣고 특정 위치까지 자율 주행하거나, 스마트폰으로 원격 조종하여 배달하는 RC카.</li>
+            <li><b>경비 RC카:</b> 초음파 센서로 침입자를 감지하거나, 카메라 모듈(고급)로 주변을 감시하는 RC카.</li>
+            <li><b>예술 RC카:</b> RC카 바닥에 펜을 달아 움직이면서 그림을 그리는 RC카.</li>
+            <li><b>청소 RC카:</b> 작은 브러시나 진공 흡입기를 달아 바닥의 먼지를 청소하는 RC카.</li>
+            <li><b>음성 제어 RC카:</b> 음성 인식 모듈을 추가하여 "전진", "정지" 등의 음성 명령으로 RC카를 제어하는 RC카.</li>
+        </ul>
+        <p>어떤 아이디어가 가장 흥미로운가요? 여러분의 상상력을 발휘하여 세상에 하나뿐인 RC카를 만들어 보세요!</p>
+
+        <hr>
+
+        <h2>❓ 궁금증 해결 시간</h2>
+        <p>오늘은 RC카 프로젝트의 심화와 확장에 대해 알아보았어요. 지금까지 배운 내용들을 통합하고, RC카에 적용할 수 있는 새로운 아이디어들을 탐색하는 시간이었죠. 혹시 궁금한 점이나, 여러분이 만들고 싶은 RC카에 대한 아이디어가 있다면 자유롭게 이야기해 주세요!</p>
+
+        <hr>
+
+        <p>축하합니다! 아두이노 RC카 만들기 프로젝트의 일곱 번째 주도 성공적으로 마쳤어요. 이제 여러분은 RC카를 직접 만들고 제어하는 것을 넘어, 새로운 기능을 추가하고 자신만의 아이디어를 구현할 수 있는 단계에 이르렀습니다. 이 과정에서 얻은 지식과 경험은 앞으로 어떤 프로젝트를 하든 큰 도움이 될 거예요. 그동안 수고 많으셨습니다!</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노이드 교실 1주차 1회차 교재: 아두이노와 친해지기 (심화)</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 4px solid #f39c12;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노이드 교실 1주차 1회차 교재: 아두이노와 친해지기 (심화)</h1>
+
+        <hr>
+
+        <h2>💡 오늘의 목표</h2>
+        <ul>
+            <li><b>아두이노</b>가 무엇인지, 어떻게 작동하는지 알아봐요.</li>
+            <li>아두이노 보드의 주요 부분을 <b>탐험</b>하고 그 역할을 이해해요.</li>
+            <li><b>아두이노 IDE 설치 및 설정</b> 방법을 배워봐요.</li>
+            <li><b>코딩</b>이 무엇인지 배우고, 내 손으로 <b>LED를 켜고 꺼봐요.</b></li>
+            <li>LED의 <b>밝기를 조절</b>하는 마법을 부려봐요!</li>
+        </ul>
+
+        <hr>
+
+        <h2>🔍 1. 아두이노, 너는 누구니?</h2>
+        <p>아두이노는 작은 컴퓨터라고 생각하면 쉬워요. 우리가 명령(코딩)을 내리면, 그 명령에 따라 불을 켜거나, 소리를 내거나, 모터를 움직이는 등 다양한 일을 할 수 있어요. 우리 주변의 <b>스마트폰, 자율주행 자동차, 로봇 청소기</b> 같은 똑똑한 기기들 속에 숨어있는 작은 두뇌가 바로 아두이노와 비슷한 역할을 한답니다.</p>
+        <p>아두이노는 특히 <b>'피지컬 컴퓨팅'</b>에 많이 사용돼요. 피지컬 컴퓨팅이란 컴퓨터 코드를 이용해서 현실 세계의 물건(LED, 모터 등)을 움직이고, 센서를 통해 현실의 정보를 컴퓨터로 가져오는 것을 말해요. 아두이노를 배우면 나만의 멋진 작품을 만들 수 있게 될 거예요!</p>
+
+        <hr>
+
+        <h2>🛠️ 2. 아두이노 보드 탐험하기</h2>
+        <p>우리 눈앞의 아두이노 보드(Arduino Uno)를 자세히 살펴볼까요? 복잡해 보이지만 중요한 부분만 알면 된답니다.</p>
+
+        <p><i>(이 부분에는 실제 아두이노 보드의 주요 부분을 표시한 이미지를 넣어주시면 좋습니다. 예: USB 포트, 전원 잭, 디지털 핀, 아날로그 핀, 리셋 버튼 등)</i></p>
+
+        <ol>
+            <li><b>USB 포트</b>: 아두이노를 컴퓨터와 연결하고, 코드를 업로드하거나 전원을 공급받는 곳이에요.</li>
+            <li><b>전원 잭</b>: 컴퓨터 없이 아두이노에 직접 전원을 공급할 때 사용해요 (건전지, 어댑터 등).</li>
+            <li><b>리셋 버튼</b>: 아두이노에 업로드된 프로그램(코드)을 처음부터 다시 시작할 때 눌러요.</li>
+            <li><b>디지털 핀 (0~13)</b>: 켜짐/꺼짐 (ON/OFF)처럼 두 가지 상태를 제어하거나 읽을 때 사용해요. LED를 켜거나 버튼을 읽을 때 주로 쓰죠.</li>
+            <li><b>아날로그 핀 (A0~A5)</b>: 빛의 밝기, 온습도처럼 다양하게 변하는 값을 읽을 때 사용해요. 디지털 핀보다 더 섬세한 제어가 가능하답니다.</li>
+            <li><b>GND (Ground) 핀</b>: 회로의 기준이 되는 마이너스(-) 전압이에요. 모든 부품은 GND와 연결되어야 정상적으로 작동해요.</li>
+        </ol>
+
+        <hr>
+
+        <h2>⚙️ 3. 아두이노 IDE 설치 및 설정</h2>
+        <p>아두이노에 코드를 입력하고 보드로 전송하려면 <b>아두이노 IDE(통합 개발 환경)</b>라는 프로그램이 필요해요. 아두이노 IDE는 아두이노 코드를 작성하고, 컴파일(기계가 이해하는 언어로 변환), 그리고 아두이노 보드로 업로드하는 모든 과정을 한 번에 할 수 있게 도와주는 프로그램이에요.</p>
+
+        <h3>설치 단계:</h3>
+        <ol>
+            <li><b>아두이노 공식 웹사이트 접속</b>: <a href="https://www.arduino.cc/en/software" target="_blank">https://www.arduino.cc/en/software</a> 에 접속해요.</li>
+            <li><b>운영체제에 맞는 버전 다운로드</b>: 사용하는 컴퓨터의 운영체제(Windows, macOS, Linux 등)에 맞는 아두이노 IDE 버전을 선택하여 다운로드합니다. 보통 'Windows MSI installer'를 추천해요.</li>
+            <li><b>설치 진행</b>: 다운로드한 설치 파일을 실행하여 안내에 따라 설치를 진행합니다. 대부분 'I Agree'를 누르고 'Next'를 계속 누르면 돼요. 중간에 드라이버 설치 여부를 묻는 창이 나오면 <b>'설치(Install)'</b>를 눌러 드라이버도 함께 설치해주세요.</li>
+            <li><b>설치 완료 및 실행</b>: 설치가 완료되면 바탕화면이나 시작 메뉴에서 아두이노 IDE 아이콘을 찾아 실행합니다.</li>
+        </ol>
+
+        <h3>초기 설정 (아두이노 보드와 연결):</h3>
+        <p>아두이노 보드에 코드를 업로드하기 전에 몇 가지 설정을 해야 해요.</p>
+        <ol>
+            <li><b>아두이노 보드 연결</b>: USB 케이블을 사용하여 아두이노 보드를 컴퓨터에 연결하세요. 보드에 불이 들어오는지 확인합니다.</li>
+            <li><b>드라이버 확인 (필요시)</b>: 대부분 자동으로 설치되지만, 만약 컴퓨터가 아두이노를 인식하지 못한다면 드라이버 문제일 수 있어요.
+                <ul>
+                    <li><b>Windows</b>: '장치 관리자' (시작 버튼 우클릭 -> 장치 관리자)를 열어 '포트 (COM & LPT)' 항목에 'Arduino Uno (COMXX)' 또는 'USB-SERIAL CH340 (COMXX)'과 같이 표시되는지 확인합니다. 만약 느낌표(!)가 있거나 다른 이름으로 표시된다면, 해당 장치를 우클릭하여 '드라이버 업데이트'를 시도하거나, 아두이노 IDE 설치 폴더 내의 `drivers` 폴더에서 수동으로 드라이버를 찾아 설치해야 할 수 있습니다. (특히 CH340 칩을 사용하는 호환 보드는 별도 드라이버 설치가 필요할 수 있습니다. 인터넷에서 'CH340 드라이버'를 검색하여 설치해 주세요.)</li>
+                </ul>
+            </li>
+            <li><b>보드 종류 선택</b>: 아두이노 IDE 메뉴에서 `툴(Tools)` → `보드(Board)` → `Arduino AVR Boards` → `Arduino Uno`를 선택합니다. (만약 다른 종류의 아두이노 보드를 사용한다면 해당 보드 이름을 선택하세요.)</li>
+            <li><b>포트 선택</b>: 아두이노 IDE 메뉴에서 `툴(Tools)` → `포트(Port)`를 선택합니다. 여기에 'COMXX (Arduino Uno)' 또는 'tty.usbserial-XXXX'와 같이 연결된 아두이노 보드의 포트가 보일 거예요. 이 포트를 클릭해서 선택합니다. (COMXX의 XX는 컴퓨터마다 다를 수 있어요.)</li>
+            <li><b>언어 설정 (선택 사항)</b>: `파일(File)` → `환경설정(Preferences)`에서 '언어(Language)'를 '한국어'로 변경하여 IDE를 한국어로 사용할 수 있습니다.</li>
+        </ol>
+        <p>이제 아두이노 IDE를 사용하여 코딩할 준비가 모두 끝났어요!</p>
+
+        <hr>
+
+        <h2>✍️ 4. 코딩의 시작: LED 깜빡이기 (Hello World!)</h2>
+        <p>이제 아두이노로 첫 코딩을 해볼 시간이에요! 가장 기본적인 예제인 LED 깜빡이기를 통해 코딩의 원리를 이해해봐요.</p>
+
+        <h3>준비물:</h3>
+        <ul>
+            <li>아두이노 우노 보드</li>
+            <li>USB 케이블</li>
+            <li>브레드보드</li>
+            <li>점퍼선 (수-수)</li>
+            <li>LED 1개 (아무 색깔이나 좋아요!)</li>
+            <li>저항 1개 (220옴 또는 330옴)</li>
+        </ul>
+
+        <h3>회로 연결:</h3>
+        <ol>
+            <li><b>LED 연결</b>: LED는 다리가 긴 쪽(+)과 짧은 쪽(-)이 있어요.
+                <ul>
+                    <li>LED의 <b>긴 다리(+)</b>를 <b>저항</b>에 연결해요.</li>
+                    <li>저항의 다른 쪽 다리를 아두이노 보드의 <b>디지털 핀 13번</b>에 연결해요.</li>
+                    <li>LED의 <b>짧은 다리(-)</b>를 아두이노 보드의 <b>GND 핀</b>에 연결해요.</li>
+                </ul>
+            </li>
+        </ol>
+        <p><b>(주의!)</b> 저항을 연결하지 않으면 LED가 타버릴 수 있으니 꼭 연결해야 해요!</p>
+        <p><i>(이 부분에는 LED와 저항이 아두이노 13번 핀과 GND 핀에 연결된 간단한 회로도 이미지를 넣어주시면 좋습니다.)</i></p>
+
+        <h3>코딩하기:</h3>
+        <ol>
+            <li>아두이노 IDE 프로그램을 실행해요.</li>
+            <li>아래 코드를 복사해서 아두이노 IDE에 붙여 넣으세요.</li>
+        </ol>
+        <pre><code>void setup() {
+  // 이 부분은 아두이노가 처음 켜지거나 리셋될 때 한 번만 실행돼요.
+  pinMode(13, OUTPUT); // 13번 핀을 LED를 켜는 출력 핀으로 설정해요.
+}
+
+void loop() {
+  // 이 부분은 아두이노가 켜져 있는 동안 계속 반복해서 실행돼요.
+  digitalWrite(13, HIGH); // 13번 핀에 연결된 LED를 켜요 (HIGH는 전기가 흐른다는 뜻!).
+  delay(1000);             // 1000밀리초(1초) 동안 기다려요.
+  digitalWrite(13, LOW);  // 13번 핀에 연결된 LED를 꺼요 (LOW는 전기가 흐르지 않는다는 뜻!).
+  delay(1000);             // 1000밀리초(1초) 동안 기다려요.
+}</code></pre>
+        <ol start="3">
+            <li><b>코드 업로드</b>: 아두이노 IDE 왼쪽 상단의 `화살표(업로드)` 버튼을 클릭해서 코드를 아두이노에 업로드하세요.</li>
+        </ol>
+
+        <h3>결과 확인:</h3>
+        <p>LED가 1초 간격으로 깜빡이는 것을 볼 수 있을 거예요! 성공했나요?</p>
+
+        <hr>
+
+        <h2>✨ 5. LED 밝기 조절하기: PWM 마법</h2>
+        <p>이번에는 LED를 그냥 켜고 끄는 게 아니라, <b>밝기를 조절</b>하는 마법을 부려볼 거예요. 마치 전등의 밝기 조절 스위치처럼 말이죠!</p>
+        <p>아두이노의 디지털 핀 중에는 `~` 표시가 있는 핀들이 있어요 (3, 5, 6, 9, 10, 11번). 이 핀들은 <b>PWM(Pulse Width Modulation)</b>이라는 특별한 기능을 가지고 있어서 아날로그 신호처럼 밝기를 조절할 수 있게 해줘요. 우리는 9번 핀을 사용해볼게요.</p>
+
+        <h3>회로 변경:</h3>
+        <ul>
+            <li>LED와 저항이 연결된 아두이노 핀을 13번에서 <b>9번 핀</b>으로 옮겨 연결하세요. (나머지 연결은 그대로)</li>
+        </ul>
+
+        <h3>코딩하기:</h3>
+        <p>아래 코드를 아두이노 IDE에 새로 붙여 넣고 업로드해 보세요.</p>
+        <pre><code>void setup() {
+  pinMode(9, OUTPUT); // 9번 핀을 출력 핀으로 설정해요.
+}
+
+void loop() {
+  // LED를 서서히 밝게 만들기
+  for (int brightness = 0; brightness &lt;= 255; brightness = brightness + 5) {
+    analogWrite(9, brightness); // 9번 핀에 연결된 LED의 밝기를 조절해요 (0~255).
+    delay(30);                   // 0.03초 동안 기다려요.
+  }
+
+  // LED를 서서히 어둡게 만들기
+  for (int brightness = 255; brightness &gt;= 0; brightness = brightness - 5) {
+    analogWrite(9, brightness); // 9번 핀에 연결된 LED의 밝기를 조절해요 (255~0).
+    delay(30);                   // 0.03초 동안 기다려요.
+  }
+}</code></pre>
+
+        <h3>새로운 코드 설명:</h3>
+        <ul>
+            <li>`analogWrite(핀번호, 밝기값)`: 이 함수는 `~` 표시가 있는 핀에서 LED의 밝기를 0부터 255까지 조절할 수 있게 해줘요. 0은 완전히 꺼진 상태, 255는 가장 밝은 상태예요.</li>
+            <li>`for` 문: `for`는 <b>반복문</b>의 한 종류예요. 특정 조건을 만족할 때까지 괄호 안의 코드를 계속 반복해서 실행해요. 여기서는 `brightness`라는 값이 0부터 255까지 5씩 증가하거나, 255부터 0까지 5씩 감소하면서 LED 밝기를 조절하는 거죠.</li>
+        </ul>
+
+        <h3>결과 확인:</h3>
+        <p>LED가 서서히 밝아졌다가 서서히 어두워지는 것을 반복하는 것을 볼 수 있을 거예요. 마치 숨 쉬는 것 같죠?</p>
+
+        <hr>
+
+        <h2>🌟 스스로 해보기!</h2>
+        <ul>
+            <li>LED가 깜빡이는 속도를 더 빠르게 또는 더 느리게 바꿔보세요. (`delay()` 함수의 숫자를 변경!)</li>
+            <li>LED가 숨 쉬는 것(밝기 조절)의 속도를 바꿔보세요. (`delay()` 함수의 숫자를 변경!)</li>
+            <li>`analogWrite` 값의 범위를 `0`부터 `100`까지만 사용하면 어떻게 될까요? 직접 값을 바꿔서 확인해 보세요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>❓ 궁금증 해결 시간</h2>
+        <p>오늘 배운 내용 중에 궁금한 점이 있나요? 무엇이든 질문해주세요!</p>
+
+        <hr>
+
+        <p>오늘 아두이노와 코딩의 첫 만남은 어땠나요? 직접 코드를 입력하고, 회로를 연결해서 LED를 제어해 보니 신기하죠? 다음 시간에는 버튼 스위치를 연결해서 아두이노와 상호작용하는 방법을 배울 거예요. 오늘 배운 내용을 잘 복습하고, 스스로 해보기 미션도 꼭 도전해 보세요!</p>
+    </div>
+</body>
+</html>

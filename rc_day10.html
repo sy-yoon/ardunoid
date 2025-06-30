@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아두이노 RC카 교실 10주차 교재: 나만의 RC카 몸체 디자인 및 조립</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+        h4 {
+            color: #1a5276;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        b {
+            color: #e74c3c; /* 강조 색상 */
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #eaf6ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            border: 1px solid #c0d8e8;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #fdf6e3;
+            border-left: 5px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .project-idea {
+            background-color: #e8f6f3;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .task {
+            background-color: #e0f2f7;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .image-container img {
+            max-width: 90%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .caution {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 아두이노 RC카 교실 10주차 교재: 나만의 RC카 몸체 디자인 및 조립</h1>
+
+        <hr>
+
+        <h2>💡 이번 주 학습 목표</h2>
+        <ul>
+            <li>RC카의 **구조와 각 부품의 역할**을 이해해요.</li>
+            <li>설계도를 바탕으로 RC카의 **몸체(섀시)를 조립**하는 방법을 익혀요.</li>
+            <li>아두이노 보드, 모터 드라이버, 센서, LCD 등 **모든 부품을 섀시에 안정적으로 고정**하는 방법을 배워요.</li>
+            <li>**깔끔한 배선 정리**를 통해 효율적이고 안전한 RC카를 만들어요.</li>
+        </ul>
+
+        <hr>
+
+        <h2>1회차: RC카 섀시의 이해와 부품 배치 계획</h2>
+
+        <h3>🔍 1. RC카 섀시(Chassis)란?</h3>
+        <p>**섀시(Chassis)**는 RC카의 뼈대이자 모든 부품이 장착되는 기본 구조를 말해요. 섀시는 RC카의 안정적인 주행 성능, 부품 보호, 그리고 전체적인 디자인을 결정하는 매우 중요한 요소입니다.</p>
+        <p>우리가 지금까지 아두이노 보드, 모터, 센서, LCD 등 다양한 부품을 개별적으로 다루었지만, 이 부품들이 하나의 RC카로 작동하려면 섀시 위에 체계적으로 배치되고 고정되어야 해요.</p>
+        <div class="image-container">
+            <img src="rc_car_chassis_example.png" alt="다양한 RC카 섀시 예시">
+            <p><i>(다양한 형태의 RC카 섀시 이미지를 삽입해 주세요. 플라스틱, 아크릴, 금속 등 재질과 2륜, 4륜, 트랙형 등 다양한 구조를 보여줄 수 있는 이미지)</i></p>
+        </div>
+        <h4>섀시의 중요성:</h4>
+        <ul>
+            <li>**안정성:** 부품들이 흔들리지 않고 고정되어 RC카가 안정적으로 주행할 수 있게 합니다.</li>
+            <li>**부품 보호:** 외부 충격으로부터 내부 전자 부품들을 보호합니다.</li>
+            <li>**공간 활용:** 제한된 공간 안에 모든 부품을 효율적으로 배치할 수 있도록 합니다.</li>
+            <li>**디자인:** RC카의 외형을 결정하는 가장 큰 요소입니다.</li>
+        </ul>
+
+        <h3>🔍 2. 우리 RC카의 부품 배치 계획하기</h3>
+        <p>우리가 지금까지 사용한 부품들을 RC카 섀시 위에 어떻게 배치할지 미리 계획하는 것이 중요해요. 효율적인 배치는 RC카의 무게 중심, 배선 정리, 그리고 유지보수에 큰 영향을 미칩니다.</p>
+        <h4>주요 부품과 고려사항:</h4>
+        <ul>
+            <li>**아두이노 보드:** RC카의 두뇌 역할을 합니다. 다른 부품들과의 연결 편의성을 고려하여 중앙에 가깝게 배치하는 것이 좋습니다.</li>
+            <li>**모터 및 바퀴:** RC카의 동력을 담당합니다. 섀시의 바닥면에 단단히 고정되어야 하며, 바퀴가 지면에 잘 닿도록 배치합니다.</li>
+            <li>**모터 드라이버 (L298N):** 모터에 전력을 공급하고 제어합니다. 아두이노와 모터 사이에 위치하며, 발열이 있을 수 있으므로 공기 순환이 잘 되는 곳에 배치하는 것이 좋습니다.</li>
+            <li>**라인 트레이서 센서:** 검은 선을 감지하는 센서입니다. RC카의 가장 앞쪽, 지면과 가까운 곳에 배치하여 선을 정확하게 읽을 수 있도록 합니다.</li>
+            <li>**LCD 모듈:** RC카의 상태를 표시합니다. 사용자가 쉽게 볼 수 있도록 RC카의 상단이나 전면에 배치하는 것이 좋습니다.</li>
+            <li>**배터리:** RC카의 전원입니다. 무게가 가장 무거우므로 RC카의 무게 중심을 잡는 데 중요한 역할을 합니다. 보통 섀시의 중앙 하단에 배치하여 무게 중심을 낮춥니다.</li>
+            <li>**점퍼선 및 케이블:** 모든 부품을 연결합니다. 배선이 꼬이거나 바퀴에 걸리지 않도록 경로를 미리 생각하고 정리 계획을 세웁니다.</li>
+        </ul>
+        <div class="image-container">
+            <img src="rc_car_component_layout_sketch.png" alt="RC카 부품 배치 스케치 예시">
+            <p><i>(RC카 섀시 위에 아두이노, 모터, 센서, LCD, 배터리 등이 대략적으로 배치된 스케치 또는 블록 다이어그램 이미지를 삽입해 주세요. 화살표로 연결 방향을 표시해도 좋습니다.)</i></p>
+        </div>
+        <p class="task"><b>스스로 해보기!</b> 여러분이 가지고 있는 RC카 섀시 키트(또는 직접 만들 섀시)를 보면서, 각 부품을 어디에 어떻게 배치할지 간단하게 스케치하거나 머릿속으로 구상해 보세요. 특히 센서와 LCD는 외부에서 잘 보이고 작동할 수 있는 위치를 고려해야 합니다.</p>
+
+        <hr>
+        <br>
+
+        <h2>2회차: RC카 몸체 조립 및 부품 고정</h2>
+
+        <h3>⚙️ 1. 조립을 위한 준비물</h3>
+        <p>이제 본격적으로 RC카를 조립할 시간이에요. 필요한 도구와 재료를 미리 준비해 주세요.</p>
+        <ul>
+            <li>**RC카 섀시 키트:** (미리 준비된 섀시, 바퀴, 모터 고정 브라켓 등)</li>
+            <li>**DC 모터 2개**</li>
+            <li>**바퀴 2개 (또는 4개)**</li>
+            <li>**캐스터 휠 (보조 바퀴) 1개:** 2륜 구동 RC카의 경우 필요</li>
+            <li>**L298N 모터 드라이버 모듈**</li>
+            <li>**아두이노 우노 보드**</li>
+            <li>**라인 트레이서 센서 모듈 (3개)**</li>
+            <li>**I2C LCD 모듈**</li>
+            <li>**9V 배터리 또는 AA/AAA 배터리 홀더 (4개 이상) 및 배터리**</li>
+            <li>**점퍼선 (수-수, 암-수 혼합)**</li>
+            <li>**나사, 너트, 스페이서:** 부품 고정용 (섀시 키트에 포함된 경우가 많음)</li>
+            <li>**드라이버 세트:** 나사를 조이거나 풀 때 사용</li>
+            <li>**양면테이프 또는 글루건:** 부품을 임시 고정하거나 추가 고정할 때 사용</li>
+            <li>**케이블 타이:** 배선을 깔끔하게 정리할 때 사용</li>
+        </ul>
+
+        <h3>⚙️ 2. RC카 조립 순서</h3>
+        <p>다음 순서에 따라 RC카를 조립해 보세요. 키트의 종류에 따라 순서가 조금 다를 수 있으니, 키트 설명서도 함께 참고하는 것이 좋습니다.</p>
+        <ol>
+            <li>**모터 및 바퀴 조립:**
+                <ul>
+                    <li>섀시에 모터 고정 브라켓을 나사로 고정합니다.</li>
+                    <li>모터를 브라켓에 삽입하고 단단히 고정합니다.</li>
+                    <li>모터 축에 바퀴를 끼워 고정합니다.</li>
+                    <li>(2륜 RC카의 경우) 캐스터 휠을 RC카의 앞쪽 또는 뒤쪽에 고정하여 균형을 잡습니다.</li>
+                </ul>
+            </li>
+            <li>**모터 드라이버 및 아두이노 보드 고정:**
+                <ul>
+                    <li>모터 드라이버를 섀시의 적절한 위치에 나사 또는 양면테이프를 이용하여 고정합니다.</li>
+                    <li>아두이노 보드도 마찬가지로 고정합니다. (아두이노는 바닥에서 약간 띄워 고정하는 것이 좋습니다. 스페이서 사용)</li>
+                </ul>
+            </li>
+            <li>**라인 트레이서 센서 고정:**
+                <ul>
+                    <li>라인 트레이서 센서 모듈을 RC카의 가장 앞쪽, 지면과 적절한 높이(보통 1~2cm)에 고정합니다. 나사 또는 브라켓을 사용합니다.</li>
+                    <li>센서가 바닥의 선을 잘 감지할 수 있도록 방향과 높이를 조절합니다.</li>
+                </ul>
+            </li>
+            <li>**LCD 모듈 고정:**
+                <ul>
+                    <li>LCD 모듈을 사용자가 쉽게 볼 수 있는 RC카 상단 또는 전면에 고정합니다. 나사 또는 양면테이프를 사용합니다.</li>
+                    <li>LCD 화면이 가려지지 않도록 주의합니다.</li>
+                </ul>
+            </li>
+            <li>**배터리 고정 및 전원 연결:**
+                <ul>
+                    <li>배터리 홀더 또는 9V 배터리를 섀시의 중앙 하단에 양면테이프나 케이블 타이로 단단히 고정합니다.</li>
+                    <li>배터리에서 모터 드라이버의 전원 입력(VM 또는 +12V)으로 연결하고, 모터 드라이버에서 아두이노의 VIN 또는 5V 핀으로 전원을 연결합니다. (회로도 다시 확인)</li>
+                </ul>
+            </li>
+            <li>**배선 정리:**
+                <ul>
+                    <li>모든 부품의 전원선과 신호선을 연결합니다.</li>
+                    <li>점퍼선이 길게 늘어지거나 바퀴에 걸리지 않도록 케이블 타이를 사용하여 깔끔하게 묶어줍니다.</li>
+                    <li>필요 없는 선은 잘라내거나 짧은 선으로 교체하여 혼란을 줄입니다.</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="image-container">
+            <img src="rc_car_assembled_example.png" alt="조립된 RC카 예시">
+            <p><i>(모든 부품이 섀시에 조립되고 배선이 정리된 RC카의 최종 조립 이미지 또는 사진을 삽입해 주세요. 깔끔하게 정리된 모습이 강조되면 좋습니다.)</i></p>
+        </div>
+        <p class="caution"><b>주의!</b> 전원선을 연결할 때는 반드시 극성(+, -)을 확인해야 합니다. 잘못 연결하면 부품이 손상될 수 있습니다. 조립 중 나사를 너무 세게 조여 부품이 파손되지 않도록 주의하세요.</p>
+
+        <h3>✅ 3. 최종 작동 테스트</h3>
+        <p>조립이 완료되면, 이제 RC카가 제대로 작동하는지 확인해 볼 시간이에요.</p>
+        <ol>
+            <li>**전원 연결:** 배터리를 연결하고 RC카에 전원이 들어오는지 확인합니다. 아두이노와 LCD에 불이 들어오는지 확인하세요.</li>
+            <li>**모터 테스트:** 간단한 스케치(예: 모터를 1초 전진, 1초 정지 반복)를 업로드하여 모터가 정상적으로 작동하는지 확인합니다. 양쪽 모터의 회전 방향이 맞는지도 확인합니다.</li>
+            <li>**센서 테스트:** 시리얼 모니터를 통해 라인 트레이서 센서 값이 정상적으로 읽히는지 확인합니다. (검은 선과 흰 바닥에서 값이 바뀌는지)</li>
+            <li>**LCD 테스트:** LCD에 메시지가 정상적으로 표시되는지 확인합니다. (9주차 코드 활용)</li>
+            <li>**통합 주행 테스트:** 9주차에서 완성한 라인 트레이서 + LCD 코드를 업로드하여 RC카가 선을 따라 주행하고, LCD에 상태 메시지가 잘 표시되는지 최종적으로 확인합니다.</li>
+        </ol>
+
+        <div class="project-idea">
+            <h4>⭐ 스스로 해보기!</h4>
+            <ul>
+                <li>자신만의 RC카 섀시 디자인을 구상하고, 아크릴이나 3D 프린터로 직접 만들어 보세요.</li>
+                <li>RC카에 LED 조명을 추가하여 RC카의 상태(예: 전진 시 녹색, 후진 시 빨간색)를 시각적으로 보여주도록 꾸며 보세요.</li>
+                <li>조립된 RC카의 무게 중심을 확인하고, 필요하다면 배터리 위치를 조절하여 주행 안정성을 높여 보세요.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2>❓ 궁금증 해결 시간</h2>
+        <p>오늘은 여러분의 아두이노 RC카가 드디어 하나의 완전한 로봇으로 탄생하는 날이었어요! 부품 하나하나를 조립하고 연결하는 과정은 쉽지 않았겠지만, 완성된 RC카를 보면 큰 보람을 느낄 수 있을 거예요. 조립 과정에서 어려웠던 점이나 궁금한 점이 있다면 언제든지 질문해주세요. 다음 시간에는 RC카 프로젝트의 마지막 단계로, 지금까지 배운 모든 것을 총정리하고 RC카를 활용한 미션을 수행하는 시간을 가질 거예요!</p>
+
+        <hr>
+
+        <p>축하합니다! 아두이노 RC카 만들기 프로젝트의 열 번째 주도 성공적으로 마쳤어요. 이제 여러분은 단순히 코드를 짜는 것을 넘어, 실제 물리적인 로봇을 조립하고 완성하는 경험을 해보았답니다. 여러분의 손으로 직접 만든 RC카는 단순한 장난감을 넘어, 여러분의 노력과 배움의 결과물이에요! 다음 시간에는 이 멋진 RC카를 가지고 다양한 미션을 수행하며 그동안 배운 지식과 기술을 뽐낼 시간입니다. 기대해주세요!</p>
+    </div>
+</body>
+</html>
